@@ -1,8 +1,8 @@
 {
-    "name": "be/mf",
+    "name": "be/framework",
     "type": "library",
-    "description": "PHP BE双驱框架（Beyond Exception）",
-    "keywords": ["PHP", "Be", "双驱", "框架", "Beyond Exception"],
+    "description": "PHP BE框架（Beyond Exception）",
+    "keywords": ["PHP", "Be", "框架", "Beyond Exception"],
     "license": "MIT",
     "authors": [
         {
