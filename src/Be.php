@@ -2,7 +2,7 @@
 
 namespace Be\Framework;
 
-use Be\Framework\Exception\RuntimeException;
+use Be\Framework\Runtime\RuntimeException;
 
 /**
  *  BE系统资源工厂
@@ -17,7 +17,7 @@ abstract class Be
     /**
      * @var \Be\Framework\Runtime\Driver
      */
-    private static $runtime = null; // 系统运行时
+    protected static $runtime = null; // 系统运行时
 
     /**
      * 获取请求对象
@@ -430,7 +430,7 @@ abstract class Be
     /**
      * 获取指定的一个菜单（单例）
      *
-     * @return Menu
+     * @return \Be\Framework\Menu\Driver
      */
     public static function getMenu()
     {
