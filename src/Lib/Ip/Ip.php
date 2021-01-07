@@ -2,7 +2,7 @@
 
 namespace Be\Lib\Ip;
 
-use Be\System\Exception\LibException;
+use Be\Framework\Lib\LibException;
 
 /**
  * 转换到地理位置（QQwry纯真地址库）

@@ -1,7 +1,7 @@
 <?php
 namespace Be\Lib\Image;
 
-use Be\System\Exception\LibException;
+use Be\Framework\Lib\LibException;
 
 /**
  * 图像处理库

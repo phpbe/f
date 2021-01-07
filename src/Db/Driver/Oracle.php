@@ -3,7 +3,7 @@
 namespace Be\Framework\db\Driver;
 
 use Be\Framework\Db\Driver;
-use Be\Framework\Exception\DbException;
+use Be\Framework\Db\DbException;
 
 /**
  * 数据库类

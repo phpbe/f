@@ -1,5 +1,5 @@
 <?php
-namespace Be\Framework\Exception;
+namespace Be\Framework\Lib;
 
 /**
  * 库异常

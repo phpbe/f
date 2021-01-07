@@ -3,8 +3,7 @@
 namespace Be\Framework\db;
 
 use Be\Framework\Be;
-use Be\Framework\CacheProxy;
-use Be\Framework\Exception\TableException;
+use Be\Framework\Cache\Proxy;
 
 /**
  * 数据库表 查询器
@@ -49,11 +48,11 @@ class Table
      * 启动缓存代理
      *
      * @param int $expire 超时时间
-     * @return CacheProxy | Mixed
+     * @return Proxy | Mixed
      */
     public function withCache($expire = 600)
     {
-        return new CacheProxy($this, $expire);
+        return new Proxy($this, $expire);
     }
 
     /**

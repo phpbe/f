@@ -1,5 +1,5 @@
 <?php
-namespace Be\Framework\Exception;
+namespace Be\Framework\App;
 
 /**
  * 服务层异常

@@ -1,7 +1,7 @@
 <?php
 namespace Be\Lib\Http;
 
-use Be\System\Exception\LibException;
+use Be\Framework\Lib\LibException;
 
 /**
  * HTTP 封装库

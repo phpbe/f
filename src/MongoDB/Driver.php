@@ -1,8 +1,6 @@
 <?php
 namespace Be\Framework\MongoDB;
 
-use Be\Framework\Exception\MongoDBException;
-
 /**
  * MongoDB
  */

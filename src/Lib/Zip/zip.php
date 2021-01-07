@@ -1,7 +1,7 @@
 <?php
 namespace Be\Lib\Zip;
 
-use Be\System\Exception\LibException;
+use Be\Framework\Lib\LibException;
 
 /**
  *  zip 压缩文件处理

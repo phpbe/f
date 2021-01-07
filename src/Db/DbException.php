@@ -1,5 +1,5 @@
 <?php
-namespace Be\Framework\Exception;
+namespace Be\Framework\Db;
 
 /**
  * 错误异常

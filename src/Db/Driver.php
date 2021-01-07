@@ -3,7 +3,6 @@
 namespace Be\Framework\db;
 
 use Be\Framework\Cache\Proxy;
-use Be\Framework\Exception\DbException;
 
 /**
  * 数据库类

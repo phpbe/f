@@ -2,7 +2,6 @@
 namespace Be\Framework\Cache;
 
 use Be\Framework\Be;
-use Be\Framework\Exception\CacheException;
 
 /**
  * 缓存驱动

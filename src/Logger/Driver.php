@@ -2,6 +2,7 @@
 
 namespace Be\Framework\Logger;
 
+use Be\Framework\Runtime\RuntimeException;
 use Monolog\Logger;
 use Be\Framework\Logger\Handler\FileHandler;
 use Be\Framework\Logger\Processor\FileProcessor;
@@ -114,8 +115,7 @@ class Driver
                 $level = Logger::EMERGENCY;
                 break;
             default:
-                echo '不支持的系统日志方法：' . $name . '！';
-                exit;
+                throw new RuntimeException('不支持的系统日志方法：' . $name . '！');
         }
 
         /**

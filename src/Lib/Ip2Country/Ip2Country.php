@@ -1,7 +1,7 @@
 <?php
 namespace Be\Lib\Ip2Country;
 
-use Be\System\Exception\LibException;
+use Be\Framework\Lib\LibException;
 
 /**
  *  Convert IP to country name
