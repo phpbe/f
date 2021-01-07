@@ -4,10 +4,10 @@ vendor
 .DS_store
 Thumbs.db
 
-/src/cache/*
-!/src/cache/index.html
+/cache/*
+!/cache/index.html
 
-/src/data/*
-!/src/data/index.html
+/data/*
+!/data/index.html
 
 
