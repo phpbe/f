@@ -2,7 +2,25 @@
 
 namespace Be\Framework;
 
+use Be\Framework\App\ServiceFactory;
+use Be\Framework\Cache\CacheFactory;
+use Be\Framework\Config\ConfigFactory;
+use Be\Framework\Db\DbFactory;
+use Be\Framework\Db\TableFactory;
+use Be\Framework\Db\TablePropertyFactory;
+use Be\Framework\Db\TupleFactory;
+use Be\Framework\Lib\LibFactory;
+use Be\Framework\Logger\LoggerFactory;
+use Be\Framework\MongoDB\MongoDBFactory;
+use Be\Framework\Plugin\PluginFactory;
+use Be\Framework\Property\PropertyFactory;
+use Be\Framework\Redis\RedisFactory;
+use Be\Framework\Request\RequestFactory;
+use Be\Framework\Response\ResponseFactory;
 use Be\Framework\Runtime\RuntimeException;
+use Be\Framework\Runtime\RuntimeFactory;
+use Be\Framework\Session\SessionFactory;
+use Be\Framework\Template\TemplateFactory;
 
 /**
  *  BE系统资源工厂
@@ -14,10 +32,6 @@ abstract class Be
 
     public static $cache = []; // 缓存资源实例
 
-    /**
-     * @var \Be\Framework\Runtime\Driver
-     */
-    protected static $runtime = null; // 系统运行时
 
     /**
      * 获取请求对象
@@ -25,7 +39,7 @@ abstract class Be
      * @return \Be\Framework\Request\Driver
      */
     public static function getRequest() {
-        return self::$cache[\Swoole\Coroutine::getuid()]['Request'];
+        return RequestFactory::getInstance();
     }
 
     /**
@@ -34,20 +48,7 @@ abstract class Be
      * @return \Be\Framework\Response\Driver
      */
     public static function getResponse() {
-        return self::$cache[\Swoole\Coroutine::getuid()]['Response'];
-    }
-
-    /**
-     * 获取SESSION
-     *
-     * @return \Be\Framework\Session\Driver
-     */
-    public static function getSession()
-    {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['Session'])) return self::$cache[$cid]['Session'];
-        self::$cache[$cid]['Session'] = new \Be\Framework\Session\Driver();
-        return self::$cache[$cid]['Session'];
+        return ResponseFactory::getInstance();
     }
 
     /**
@@ -57,10 +58,7 @@ abstract class Be
      */
     public static function getCache()
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['Cache'])) return self::$cache[$cid]['Cache'];
-        self::$cache[$cid]['Cache'] = new \Be\Framework\Cache\Driver();
-        return self::$cache[$cid]['Cache'];
+        return CacheFactory::getInstance();
     }
 
     /**
@@ -70,10 +68,7 @@ abstract class Be
      */
     public static function getLogger()
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['Logger'])) return self::$cache[$cid]['Logger'];
-        self::$cache[$cid]['Logger'] = new \Be\Framework\Logger\Driver();
-        return self::$cache[$cid]['Logger'];
+        return LoggerFactory::getInstance();
     }
 
     /**
@@ -85,10 +80,7 @@ abstract class Be
      */
     public static function getDb($name = 'master')
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['Db'][$name])) return self::$cache[$cid]['Db'][$name];
-        self::$cache[$cid]['Db'][$name] = self::newDb($name);
-        return self::$cache[$cid]['Db'][$name];
+        return DbFactory::getInstance($name);
     }
 
     /**
@@ -102,16 +94,7 @@ abstract class Be
      */
     public static function getExpireDb($name = 'master', $expire = 600)
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['ExpireDb'][$name]['expire']) && self::$cache[$cid]['ExpireDb'][$name]['expire'] > time()) {
-            return self::$cache[$cid]['ExpireDb'][$name]['instance'];
-        }
-
-        self::$cache[$cid]['ExpireDb'][$name] = [
-            'expire' => time() + $expire,
-            'instance' => self::newDb($name)
-        ];
-        return self::$cache[$cid]['ExpireDb'][$name]['instance'];
+        return DbFactory::getExpireInstance($name, $expire);
     }
 
     /**
@@ -123,17 +106,7 @@ abstract class Be
      */
     public static function newDb($name = 'master')
     {
-        $config = self::getConfig('System.Db');
-        if (!isset($config->$name)) {
-            throw new \RuntimeException('数据库配置项（' . $name . '）不存在！');
-        }
-
-        $config = $config->$name;
-
-        $class = 'Be\\System\\Db\\Driver\\' . ucfirst($config['driver']);
-        if (!class_exists($class)) throw new \RuntimeException('数据库配置项（' . $name . '）指定的数据库驱动' . ucfirst($config['driver']) . '不支持！');
-
-        return new $class($config);
+        return DbFactory::newInstance($name);
     }
 
     /**
@@ -145,27 +118,19 @@ abstract class Be
      */
     public static function getRedis($name = 'master')
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['Redis'][$name])) return self::$cache[$cid]['Redis'][$name];
-        self::$cache[$cid]['Redis'][$name] = self::newRedis($name);
-        return self::$cache[$cid]['Redis'][$name];
+        return RedisFactory::getInstance($name);
     }
 
     /**
      * 新创建一个Redis对象
      *
-     * @param string $redis Redis名
+     * @param string $name Redis名
      * @return \Be\Framework\Redis\Driver
      * @throws RuntimeException
      */
-    public static function newRedis($redis = 'master')
+    public static function newRedis($name = 'master')
     {
-        $config = self::getConfig('System.Redis');
-        if (!isset($config->$redis)) {
-            throw new RuntimeException('Redis配置项（' . $redis . '）不存在！');
-        }
-
-        return new \Be\Framework\Redis\Driver($config->$redis);
+        return RedisFactory::newInstance($name);
     }
 
     /**
@@ -177,10 +142,7 @@ abstract class Be
      */
     public static function getMongoDB($name = 'master')
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['MongoDB'][$name])) return self::$cache[$cid]['MongoDB'][$name];
-        self::$cache[$cid]['MongoDB'][$name] = self::newMongoDB($name);
-        return self::$cache[$cid]['MongoDB'][$name];
+        return MongoDBFactory::getInstance($name);
     }
 
     /**
@@ -192,11 +154,7 @@ abstract class Be
      */
     public static function newMongoDB($name = 'master')
     {
-        $config = self::getConfig('System.MongoDB');
-        if (!isset($config->$name)) {
-            throw new RuntimeException('MongoDB配置项（' . $name . '）不存在！');
-        }
-        return new \Be\Framework\MongoDB\Driver($config->$name);
+        return MongoDBFactory::newInstance($name);
     }
 
     /**
@@ -208,10 +166,7 @@ abstract class Be
      */
     public static function getLib($name)
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['Lib'][$name])) return self::$cache[$cid]['Lib'][$name];
-        self::$cache[$cid]['Lib'][$name] = self::newLib($name);
-        return self::$cache[$cid]['Lib'][$name];
+        return LibFactory::getInstance($name);
     }
 
     /**
@@ -223,15 +178,7 @@ abstract class Be
      */
     public static function newLib($name)
     {
-        $class = null;
-        if (strpos($name, '\\') === false) {
-            $class = 'Be\\Lib\\' . $name . '\\' . $name;
-        } else {
-            $class = $name;
-        }
-        if (!class_exists($class)) throw new RuntimeException('库 ' . $class . ' 不存在！');
-
-        return new $class();
+        return LibFactory::newInstance($name);
     }
 
     /**
@@ -243,10 +190,7 @@ abstract class Be
      */
     public static function getPlugin($name)
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['Plugin'][$name])) return self::$cache[$cid]['Plugin'][$name];
-        self::$cache[$cid]['Plugin'][$name] = self::newPlugin($name);
-        return self::$cache[$cid]['Plugin'][$name];
+        return PluginFactory::getInstance($name);
     }
 
     /**
@@ -258,12 +202,7 @@ abstract class Be
      */
     public static function newPlugin($name)
     {
-        $class = 'Be\\Plugin\\' . $name . '\\' . $name;
-        if (!class_exists($class)) {
-            throw new RuntimeException('扩展 ' . $name . ' 不存在！');
-        }
-
-        return new $class();
+        return PluginFactory::newInstance($name);
     }
 
     /**
@@ -271,14 +210,10 @@ abstract class Be
      *
      * @param string $name 配置文件名
      * @return mixed
-     * @throws RuntimeException
      */
     public static function getConfig($name)
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['Config'][$name])) return self::$cache[$cid]['Config'][$name];
-        self::$cache[$cid]['Config'][$name] = self::newConfig($name);
-        return self::$cache[$cid]['Config'][$name];
+        return ConfigFactory::getInstance($name);
     }
 
     /**
@@ -286,21 +221,10 @@ abstract class Be
      *
      * @param string $name 配置文件名
      * @return mixed
-     * @throws RuntimeException
      */
     public static function newConfig($name)
     {
-        $class = 'Be\\Data\\Config\\' . $name;
-        if (class_exists($class)) {
-            return new $class();
-        }
-
-        $class = 'Be\\Config\\' . $name;
-        if (class_exists($class)) {
-            return new $class();
-        }
-
-        throw new RuntimeException('配置文件 ' . $name . ' 不存在！');
+        return ConfigFactory::newInstance($name);
     }
 
     /**
@@ -311,10 +235,7 @@ abstract class Be
      */
     public static function getService($name)
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['Service'][$name])) return self::$cache[$cid]['Service'][$name];
-        self::$cache[$cid]['Service'][$name] = self::newService($name);
-        return self::$cache[$cid]['Service'][$name];
+        return ServiceFactory::getInstance($name);
     }
 
     /**
@@ -325,10 +246,7 @@ abstract class Be
      */
     public static function newService($name)
     {
-        $parts = explode('.', $name);
-        $app = array_shift($parts);
-        $class = 'Be\\App\\' . $app . '\\Service\\' . implode('\\', $parts);
-        return new $class();
+        return ServiceFactory::newInstance($name);
     }
 
     /**
@@ -340,10 +258,7 @@ abstract class Be
      */
     public static function getTuple($name, $db = 'master')
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['Tuple'][$db][$name])) return self::$cache[$cid]['Tuple'][$db][$name];
-        self::$cache[$cid]['Tuple'][$db][$name] = self::newTuple($name);
-        return self::$cache[$cid]['Tuple'][$db][$name];
+        return TupleFactory::getInstance($name, $db);
     }
 
     /**
@@ -355,16 +270,7 @@ abstract class Be
      */
     public static function newTuple($name, $db = 'master')
     {
-        $path = self::$runtime->cachePath() . '/System/Tuple/'.$db.'/'.$name.'.php';
-        $configSystem = self::getConfig('System.System');
-        if ($configSystem->developer || !file_exists($path)) {
-            $service = self::getService('System.Db');
-            $service->updateTuple($name, $db);
-            include_once $path;
-        }
-
-        $class = 'Be\\Cache\\System\\Tuple\\' . $db . '\\' . $name;
-        return (new $class());
+        return TupleFactory::newInstance($name, $db);
     }
 
     /**
@@ -376,10 +282,7 @@ abstract class Be
      */
     public static function getTable($name, $db = 'master')
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid]['Table'][$db][$name])) return self::$cache[$cid]['Table'][$db][$name];
-        self::$cache[$cid]['Table'][$db][$name] = self::newTable($name, $db);
-        return self::$cache[$cid]['Table'][$db][$name];
+        return TableFactory::getInstance($name, $db);
     }
 
     /**
@@ -391,16 +294,7 @@ abstract class Be
      */
     public static function newTable($name, $db = 'master')
     {
-        $path = self::$runtime->cachePath() . '/System/Table/'.$db.'/'.$name.'.php';
-        $configSystem = self::getConfig('System.System');
-        if ($configSystem->developer || !file_exists($path)) {
-            $service = self::getService('System.Db');
-            $service->updateTable($name, $db);
-            include_once $path;
-        }
-
-        $class = 'Be\\Cache\\System\\Table\\' . $db . '\\' . $name;
-        return (new $class());
+        return TableFactory::newInstance($name, $db);
     }
 
     /**
@@ -412,19 +306,7 @@ abstract class Be
      */
     public static function getTableProperty($name, $db = 'master')
     {
-        if (isset(self::$cache['TableProperty'][$db][$name])) return self::$cache['TableProperty'][$db][$name];
-
-        $path = self::$runtime->cachePath() . '/System/TableProperty/'.$db.'/'.$name.'.php';
-        $configSystem = self::getConfig('System.System');
-        if ($configSystem->developer || !file_exists($path)) {
-            $service = self::getService('System.Db');
-            $service->updateTableProperty($name, $db);
-            include_once $path;
-        }
-
-        $class = 'Be\\Cache\\System\\TableProperty\\' . $db . '\\' . $name;
-        self::$cache['TableProperty'][$db][$name] = new $class();
-        return self::$cache['TableProperty'][$db][$name];
+        return TablePropertyFactory::getInstance($name, $db);
     }
 
     /**
@@ -436,7 +318,7 @@ abstract class Be
     {
         if (isset(self::$cache['Menu'])) return self::$cache['Menu'];
 
-        $path = self::$runtime->cachePath() . '/System/Menu.php';
+        $path = self::$runtime->getCachePath() . '/System/Menu.php';
         $configSystem = self::getConfig('System.System');
         if ($configSystem->developer || !file_exists($path)) {
             $service = self::getService('System.Menu');
@@ -450,6 +332,31 @@ abstract class Be
     }
 
     /**
+     * 获取一个属性（单例）
+     *
+     * @param string $name 名称
+     * @return \Be\Framework\Property\Driver
+     * @throws RuntimeException
+     */
+    public static function getProperty($name)
+    {
+        return PropertyFactory::getInstance($name);
+    }
+
+    /**
+     * 获取指定的一个模板（单例）
+     *
+     * @param string $template 模板名
+     * @param string $theme 主题名
+     * @return \Be\Framework\Template\Driver
+     * @throws RuntimeException
+     */
+    public static function getTemplate($template, $theme = null)
+    {
+        return TemplateFactory::getInstance($template, $theme);
+    }
+
+    /**
      * 获取指定的一个角色信息（单例）
      *
      * @param int $roleId 角色ID
@@ -459,7 +366,7 @@ abstract class Be
     {
         if (isset(self::$cache['Role'][$roleId])) return self::$cache['Role'][$roleId];
 
-        $path = self::$runtime->cachePath() . '/System/Role/Role' . $roleId . '.php';
+        $path = self::$runtime->getCachePath() . '/System/Role/Role' . $roleId . '.php';
         $configSystem = self::getConfig('System.System');
         if ($configSystem->developer || !file_exists($path)) {
             $service = self::getService('System.Role');
@@ -470,65 +377,6 @@ abstract class Be
         $class = 'Be\\Cache\\System\\Role\\Role' . $roleId;
         self::$cache['Role'][$roleId] = new $class();
         return self::$cache['Role'][$roleId];
-    }
-
-    /**
-     * 获取一个属性（单例）
-     *
-     * @param string $name 名称
-     * @return Property
-     * @throws RuntimeException
-     */
-    public static function getProperty($name)
-    {
-        if (isset(self::$cache['Property'][$name])) return self::$cache['Property'][$name];
-
-        $parts = explode('.', $name);
-        $class = 'Be\\' . implode('\\', $parts) . '\\Property';
-        if (!class_exists($class)) throw new RuntimeException('属性 ' . $name . ' 不存在！');
-        $instance = new $class();
-
-        self::$cache['Property'][$name] = $instance;
-        return self::$cache['Property'][$name];
-    }
-
-    /**
-     * 获取指定的一个模板（单例）
-     *
-     * @param string $template 模板名
-     * @param string $theme 主题名
-     * @return Template
-     * @throws RuntimeException
-     */
-    public static function getTemplate($template, $theme = null)
-    {
-        $cid = self::getCoroutineId();
-        $parts = explode('.', $template);
-        $type = array_shift($parts);
-        $name = array_shift($parts);
-
-        $configSystem = self::getConfig('System.System');
-
-        if ($theme === null) {
-            $property = Be::getProperty($type . '.' . $name);
-            if (isset($property->theme)) {
-                $theme = $property->theme;
-            } else {
-                $theme = $configSystem->theme;
-            }
-        }
-
-        if (isset(self::$cache[$cid]['Template'][$theme][$template])) return self::$cache[$cid]['Template'][$theme][$template];
-
-        $path = self::$runtime->cachePath() . '/System/Template/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
-        if ($configSystem->developer || !file_exists($path)) {
-            $service = self::getService('System.Template');
-            $service->update($template, $theme);
-        }
-
-        $class = 'Be\\Cache\\System\\Template\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
-        self::$cache[$cid]['Template'][$theme][$template] = new $class();
-        return self::$cache[$cid]['Template'][$theme][$template];
     }
 
     /**
@@ -557,10 +405,7 @@ abstract class Be
 
     public static function getRuntime()
     {
-        if (self::$runtime == null) {
-            self::$runtime = new \Be\Framework\Runtime\Driver();
-        }
-        return self::$runtime;
+        return RuntimeFactory::getInstance();
     }
 
 }

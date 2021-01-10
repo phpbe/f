@@ -3,6 +3,7 @@
 namespace Be\Framework\Response;
 
 use Be\Framework\Be;
+use Be\Framework\Request\RequestFactory;
 
 
 /**
@@ -123,7 +124,7 @@ class Driver
             if ($redirectTimeout > 0) $this->set('redirectTimeout', $redirectTimeout);
         }
 
-        $request = Be::getRequest();
+        $request = RequestFactory::getInstance();
         if ($request->isAjax()) {
             $this->json();
         } else {
@@ -148,7 +149,7 @@ class Driver
             if ($redirectTimeout > 0) $this->set('redirectTimeout', $redirectTimeout);
         }
 
-        $request = Be::getRequest();
+        $request = RequestFactory::getInstance();
         if ($request->isAjax()) {
             $this->json();
         } else {
@@ -163,7 +164,7 @@ class Driver
      */
     public function exception(\Throwable $e)
     {
-        $request = Be::getRequest();
+        $request = RequestFactory::getInstance();
         if ($request->isAjax()) {
             $this->set('success', false);
             $this->set('message', $e->getMessage());
@@ -183,12 +184,12 @@ class Driver
      */
     public function createHistory(string $historyKey = null)
     {
-        $request = Be::getRequest();
+        $request = RequestFactory::getInstance();
         if ($historyKey === null) {
-            $historyKey = $request->app() . '.' . $request->controller();
+            $historyKey = $request->getAppName() . '.' . $request->getControllerName();
         }
 
-        $session = Be::getSession();
+        $session = SessionFactory::getInstance();
         $session->set('_history_url_'.$historyKey, $request->server('REQUEST_URI'));
         $session->set('_history_post_'.$historyKey, serialize($request->post()));
     }
@@ -202,9 +203,9 @@ class Driver
      */
     public function successAndBack(string $message, string $historyKey = null, int $redirectTimeout = 3)
     {
-        $request = Be::getRequest();
+        $request = RequestFactory::getInstance();
         if ($historyKey === null) {
-            $historyKey = $request->app() . '.' . $request->controller();
+            $historyKey = $request->getAppName() . '.' . $request->getControllerName();
         }
 
         $this->set('success', true);
@@ -240,9 +241,9 @@ class Driver
      */
     public function errorAndBack(string $message, string $historyKey = null, int $redirectTimeout = 3)
     {
-        $request = Be::getRequest();
+        $request = RequestFactory::getInstance();
         if ($historyKey === null) {
-            $historyKey = $request->app() . '.' . $request->controller();
+            $historyKey = $request->getAppName() . '.' . $request->getControllerName();
         }
 
         $this->set('success', false);
@@ -278,11 +279,7 @@ class Driver
     public function display(string $template = null, string $theme = null)
     {
         if ($template === null) {
-            $request = Be::getRequest();
-            $app = $request->app();
-            $controller = $request->controller();
-            $action = $request->action();
-            $template = 'App.' . $app . '.' . $controller . '.' . $action;
+            $template = 'App.' . RequestFactory::getInstance()->getRoute();
         }
 
         $this->response->end($this->fetch($template, $theme));

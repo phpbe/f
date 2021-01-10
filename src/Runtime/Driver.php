@@ -35,7 +35,7 @@ class Driver
      *
      * @return string
      */
-    public function rootPath()
+    public function getRootPath()
     {
         return $this->rootPath;
     }
@@ -51,7 +51,7 @@ class Driver
     /**
      * @return string
      */
-    public function dataDir()
+    public function getDataDir()
     {
         return $this->dataDir;
     }
@@ -59,7 +59,7 @@ class Driver
     /**
      * @return string
      */
-    public function dataPath()
+    public function getDataPath()
     {
         return $this->rootPath . '/' . $this->dataDir;
     }
@@ -75,7 +75,7 @@ class Driver
     /**
      * @return string
      */
-    public function cachePath()
+    public function getCachePath()
     {
         return $this->rootPath . '/' . $this->cacheDir;
     }
@@ -83,7 +83,7 @@ class Driver
     /**
      * @return string
      */
-    public function cacheDir()
+    public function getCacheDir()
     {
         return $this->cacheDir;
     }

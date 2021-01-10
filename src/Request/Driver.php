@@ -2,14 +2,16 @@
 
 namespace Be\Framework\Request;
 
+use Be\Framework\Runtime\RuntimeFactory;
+
 /**
  * Request
  */
 class Driver
 {
-    protected $app = null;
-    protected $controller = null;
-    protected $action = null;
+    protected $appName = null;
+    protected $controllerName = null;
+    protected $actionName = null;
     protected $route = null;
 
     protected $json = null;
@@ -22,65 +24,6 @@ class Driver
     public function __construct(\Swoole\Http\Request $request)
     {
         $this->request = $request;
-    }
-
-    public function method()
-    {
-        return $this->request->server['request_method'];
-    }
-
-    public function isGet()
-    {
-        return 'GET' == $this->request->server['request_method'] ? true : false;
-    }
-
-    public function isPost()
-    {
-        return 'POST' == $this->request->server['request_method'] ? true : false;
-    }
-
-    public function isAjax()
-    {
-        return (
-        (isset($this->request->header['accept']) && strpos(strtolower($this->request->header['accept']), 'application/json') !== false)
-        ) ? true : false;
-    }
-
-    /**
-     * 获取当前请求的完整网址
-     */
-    public function url()
-    {
-        $url = 'http://';
-        $url .= $this->request->header['host'];
-        $url .= $_SERVER['REQUEST_URI'];
-        return $url;
-    }
-
-    /**
-     * 获取当前请求的完整网址
-     */
-    public function rootUrl() {
-        $url = 'http://';
-        $url .= $this->request->header['host'];
-        return $url;
-    }
-
-    /**
-     * 获取data数据目录的网址
-     */
-    public function dataUrl() {
-        return $this->rootUrl() . '/' . Be::getRuntime()->dataDir();
-    }
-
-    /**
-     * 获取请求者的 IP 地址
-     *
-     * @return string
-     */
-    public function ip(bool $detectProxy = true)
-    {
-        return  $this->request->server['remote_addr'];
     }
 
     /**
@@ -289,7 +232,65 @@ class Driver
         } else {
             return $closure($value);
         }
+    }
 
+    public function isGet()
+    {
+        return 'GET' == $this->request->server['request_method'] ? true : false;
+    }
+
+    public function isPost()
+    {
+        return 'POST' == $this->request->server['request_method'] ? true : false;
+    }
+
+    public function isAjax()
+    {
+        return (
+        (isset($this->request->header['accept']) && strpos(strtolower($this->request->header['accept']), 'application/json') !== false)
+        ) ? true : false;
+    }
+
+    public function getMethod()
+    {
+        return $this->request->server['request_method'];
+    }
+
+    /**
+     * 获取当前请求的完整网址
+     */
+    public function getUrl()
+    {
+        $url = 'http://';
+        $url .= $this->request->header['host'];
+        $url .= $_SERVER['REQUEST_URI'];
+        return $url;
+    }
+
+    /**
+     * 获取请求者的 IP 地址
+     *
+     * @return string
+     */
+    public function getIp(bool $detectProxy = true)
+    {
+        return  $this->request->server['remote_addr'];
+    }
+
+    /**
+     * 获取当前请求的完整网址
+     */
+    public function getRootUrl() {
+        $url = 'http://';
+        $url .= $this->request->header['host'];
+        return $url;
+    }
+
+    /**
+     * 获取data数据目录的网址
+     */
+    public function getDataUrl() {
+        return $this->getRootUrl() . '/' . RuntimeFactory::getInstance()->getDataDir();
     }
 
     /**
@@ -297,9 +298,9 @@ class Driver
      *
      * @return null | string
      */
-    public function app()
+    public function getAppName()
     {
-        return $this->app;
+        return $this->appName;
     }
 
     /**
@@ -307,9 +308,9 @@ class Driver
      *
      * @return null | string
      */
-    public function controller()
+    public function getControllerName()
     {
-        return $this->controller;
+        return $this->controllerName;
     }
 
     /**
@@ -317,9 +318,9 @@ class Driver
      *
      * @return null | string
      */
-    public function action()
+    public function getActionName()
     {
-        return $this->action;
+        return $this->actionName;
     }
 
     /**
@@ -327,7 +328,7 @@ class Driver
      *
      * @return null | string
      */
-    public function route()
+    public function getRoute()
     {
         return $this->route;
     }
@@ -335,16 +336,16 @@ class Driver
     /**
      * 设置当前路径
      *
-     * @param string $app 应用名
-     * @param string $controller 控制器名
-     * @param string $action 动作名
+     * @param string $appName 应用名
+     * @param string $controllerName 控制器名
+     * @param string $actionName 动作名
      */
-    public function setRoute(string $app, string $controller, string $action)
+    public function setRoute(string $appName, string $controllerName, string $actionName)
     {
-        $this->app = $app;
-        $this->controller = $controller;
-        $this->action = $action;
-        $this->route = $app . '.' . $controller . '.' . $action;
+        $this->appName = $appName;
+        $this->controllerName = $controllerName;
+        $this->actionName = $actionName;
+        $this->route = $appName . '.' . $controllerName . '.' . $actionName;
     }
 
 }
