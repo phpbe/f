@@ -1,8 +1,8 @@
 <?php
 
-namespace Be\Framework\Logger\Processor;
+namespace Be\F\Logger\Processor;
 
-use Be\Framework\Util\FileSystem\FileSize;
+use Be\F\Util\FileSystem\FileSize;
 use Monolog\Logger;
 
 class FileProcessor

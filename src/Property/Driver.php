@@ -1,9 +1,9 @@
 <?php
-namespace Be\Framework\Property;
+namespace Be\F\Property;
 
-use Be\Framework\Request\RequestFactory;
-use Be\Framework\Runtime\RuntimeException;
-use Be\Framework\Runtime\RuntimeFactory;
+use Be\F\Request\RequestFactory;
+use Be\F\Runtime\RuntimeException;
+use Be\F\Runtime\RuntimeFactory;
 
 /**
  * 属性基类

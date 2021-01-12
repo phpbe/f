@@ -1,5 +1,5 @@
 <?php
-namespace Be\Framework\App;
+namespace Be\F\App;
 
 /**
  * 应用安装器

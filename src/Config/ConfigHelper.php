@@ -1,8 +1,8 @@
 <?php
 
-namespace Be\Framework\Config;
+namespace Be\F\Config;
 
-use Be\Framework\Runtime\RuntimeFactory;
+use Be\F\Runtime\RuntimeFactory;
 
 class ConfigHelper
 {

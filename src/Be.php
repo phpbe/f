@@ -1,16 +1,14 @@
 <?php
 
-namespace Be\Framework;
+namespace Be\F;
 
-use Be\Framework\App\ServiceFactory;
-use Be\Framework\Cache\CacheFactory;
-use Be\Framework\Config\ConfigFactory;
-use Be\Framework\Logger\LoggerFactory;
-use Be\Framework\Property\PropertyFactory;
-use Be\Framework\Request\RequestFactory;
-use Be\Framework\Response\ResponseFactory;
-use Be\Framework\Runtime\RuntimeException;
-use Be\Framework\Runtime\RuntimeFactory;
+use Be\F\Config\ConfigFactory;
+use Be\F\Logger\LoggerFactory;
+use Be\F\Property\PropertyFactory;
+use Be\F\Request\RequestFactory;
+use Be\F\Response\ResponseFactory;
+use Be\F\Runtime\RuntimeException;
+use Be\F\Runtime\RuntimeFactory;
 
 /**
  *  BE系统资源工厂
@@ -35,7 +33,7 @@ abstract class Be
     /**
      * 获取请求对象
      *
-     * @return \Be\Framework\Request\Driver
+     * @return \Be\F\Request\Driver
      */
     public static function getRequest()
     {
@@ -45,7 +43,7 @@ abstract class Be
     /**
      * 获取输出对象
      *
-     * @return \Be\Framework\Response\Driver
+     * @return \Be\F\Response\Driver
      */
     public static function getResponse()
     {
@@ -75,31 +73,9 @@ abstract class Be
     }
 
     /**
-     * 获取指定的一个服务（单例）
-     *
-     * @param string $name 服务名
-     * @return mixed
-     */
-    public static function getService($name)
-    {
-        return ServiceFactory::getInstance($name);
-    }
-
-    /**
-     * 新创建一个服务
-     *
-     * @param string $name 服务名
-     * @return mixed
-     */
-    public static function newService($name)
-    {
-        return ServiceFactory::newInstance($name);
-    }
-
-    /**
      * 获取日志记录器
      *
-     * @return \Be\Framework\Logger\Driver
+     * @return \Be\F\Logger\Driver
      */
     public static function getLogger()
     {
@@ -110,7 +86,7 @@ abstract class Be
      * 获取一个属性（单例）
      *
      * @param string $name 名称
-     * @return \Be\Framework\Property\Driver
+     * @return \Be\F\Property\Driver
      * @throws RuntimeException
      */
     public static function getProperty($name)

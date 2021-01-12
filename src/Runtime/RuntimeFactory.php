@@ -1,6 +1,6 @@
 <?php
 
-namespace Be\Framework\Runtime;
+namespace Be\F\Runtime;
 
 /**
  * Runtime工厂

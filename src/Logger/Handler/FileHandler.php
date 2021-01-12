@@ -1,10 +1,10 @@
 <?php
 
-namespace Be\Framework\Logger\Handler;
+namespace Be\F\Logger\Handler;
 
 use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
-use Be\Framework\Be;
+use Be\F\Be;
 
 class FileHandler extends AbstractProcessingHandler
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Be\Framework\Request;
+namespace Be\F\Request;
 
-use Be\Framework\Runtime\RuntimeFactory;
+use Be\F\Runtime\RuntimeFactory;
 
 /**
  * Request

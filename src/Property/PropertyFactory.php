@@ -1,8 +1,8 @@
 <?php
 
-namespace Be\Framework\Property;
+namespace Be\F\Property;
 
-use Be\Framework\Runtime\RuntimeException;
+use Be\F\Runtime\RuntimeException;
 
 
 /**

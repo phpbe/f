@@ -1,6 +1,6 @@
 <?php
 
-namespace Be\Framework\Response;
+namespace Be\F\Response;
 
 
 /**

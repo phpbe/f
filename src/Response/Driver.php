@@ -1,9 +1,9 @@
 <?php
 
-namespace Be\Framework\Response;
+namespace Be\F\Response;
 
-use Be\Framework\Be;
-use Be\Framework\Request\RequestFactory;
+use Be\F\Be;
+use Be\F\Request\RequestFactory;
 
 
 /**

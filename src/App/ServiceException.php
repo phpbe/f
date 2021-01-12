@@ -1,5 +1,5 @@
 <?php
-namespace Be\Framework\App;
+namespace Be\F\App;
 
 /**
  * 服务层异常

@@ -1,6 +1,6 @@
 <?php
 
-namespace Be\Framework\Logger;
+namespace Be\F\Logger;
 
 
 /**

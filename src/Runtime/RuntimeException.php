@@ -1,5 +1,5 @@
 <?php
-namespace Be\Framework\Runtime;
+namespace Be\F\Runtime;
 
 /**
  * 服务层异常

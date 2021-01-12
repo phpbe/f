@@ -1,8 +1,8 @@
 <?php
 
-namespace Be\Framework\Config;
+namespace Be\F\Config;
 
-use Be\Framework\Runtime\RuntimeException;
+use Be\F\Runtime\RuntimeException;
 
 /**
  * Config工厂

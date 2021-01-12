@@ -1,5 +1,5 @@
 <?php
-use Be\Framework\Be;
+use Be\F\Be;
 
 
 /**
@@ -9,7 +9,7 @@ use Be\Framework\Be;
  * @param null | string $route 路径（应用名.控制器名.动作名）
  * @param null | array $params
  * @return string 生成的网址
- * @throws \Be\Framework\Exception\RuntimeException
+ * @throws \Be\F\Exception\RuntimeException
  */
 function beUrl($route = null, $params = [])
 {

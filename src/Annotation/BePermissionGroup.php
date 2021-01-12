@@ -1,5 +1,5 @@
 <?php
-namespace Be\Framework\Annotation;
+namespace Be\F\Annotation;
 
 /**
  * 权限分组

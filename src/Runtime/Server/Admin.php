@@ -1,10 +1,10 @@
 <?php
 
-namespace Be\Framework\Runtime\Driver;
+namespace Be\F\Runtime\Driver;
 
-use Be\Framework\Be;
-use Be\Framework\Exception\RuntimeException;
-use Be\Framework\Log;
+use Be\F\Be;
+use Be\F\Exception\RuntimeException;
+use Be\F\Log;
 
 /**
  *  后台管理服务器
@@ -135,8 +135,8 @@ class Admin
                 }
             }
 
-            $request = new \Be\Framework\Request\Driver\Swoole($swRequest);
-            $response = new \Be\Framework\Response\Driver\Swoole($swResponse);
+            $request = new \Be\F\Request\Driver\Swoole($swRequest);
+            $response = new \Be\F\Response\Driver\Swoole($swResponse);
 
             $cid = \Swoole\Coroutine::getuid();
             Be::$cache[$cid]['Request'] = $request;

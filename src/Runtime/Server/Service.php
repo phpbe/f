@@ -1,10 +1,10 @@
 <?php
 
-namespace Be\Framework\Runtime\Server;
+namespace Be\F\Runtime\Server;
 
-use Be\Framework\Be;
-use Be\Framework\Exception\RuntimeException;
-use Be\Framework\Log\Driver;
+use Be\F\Be;
+use Be\F\Exception\RuntimeException;
+use Be\F\Log\Driver;
 
 /**
  * 服务
@@ -87,8 +87,8 @@ class Service
                 }
             }
 
-            $request = new \Be\Framework\Request\Driver($swRequest);
-            $response = new \Be\Framework\Response\Driver($swResponse);
+            $request = new \Be\F\Request\Driver($swRequest);
+            $response = new \Be\F\Response\Driver($swResponse);
 
             $cid = \Swoole\Coroutine::getuid();
             Be::$cache[$cid]['Request'] = $request;

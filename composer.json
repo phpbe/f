@@ -1,5 +1,5 @@
 {
-    "name": "be/framework",
+    "name": "be/f",
     "type": "library",
     "description": "PHP BE框架（Beyond Exception）",
     "keywords": ["PHP", "Be", "框架", "Beyond Exception"],
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Be\\Framework\\": "src"
+            "Be\\F\\": "src"
         },
         "files": [
             "src/functions.php"

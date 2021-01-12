@@ -1,8 +1,8 @@
 <?php
 
-namespace Be\Framework\Runtime\Driver;
+namespace Be\F\Runtime\Driver;
 
-use Be\Framework\Runtime\Driver;
+use Be\F\Runtime\Driver;
 
 /**
  * Swoole 运行时

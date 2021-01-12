@@ -1,6 +1,6 @@
 <?php
 
-namespace Be\Framework\Annotation;
+namespace Be\F\Annotation;
 
 /**
  * 驱动
