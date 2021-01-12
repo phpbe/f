@@ -1,10 +1,8 @@
 <?php
-namespace Be\App\System\Config;
+namespace Be\Framework\Logger;
 
-/**
- * @BeConfig("系统运行日志")
- */
-class Log
+
+class Config
 {
     /**
      * @BeConfigItem("日志级别",
