@@ -85,6 +85,7 @@ class Driver
      * @param $name
      * @param $arguments
      * @return string
+     * @throws RuntimeException
      */
     public function __call($name, $arguments)
     {

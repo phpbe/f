@@ -1,5 +1,4 @@
 <?php
-use Be\F\Be;
 
 
 /**
@@ -9,20 +8,20 @@ use Be\F\Be;
  * @param null | string $route 路径（应用名.控制器名.动作名）
  * @param null | array $params
  * @return string 生成的网址
- * @throws \Be\F\Exception\RuntimeException
+ * @throws \Be\F\Runtime\RuntimeException
  */
 function beUrl($route = null, $params = [])
 {
-    $request = Be::getRequest();
+    $request = \Be\F\Request\RequestFactory::getInstance();
     if ($route === null) {
         if (count($params) > 0) {
-            $route = $request->route();
+            $route = $request->getRoute();
         } else {
-            return $request->rootUrl();
+            return $request->getRootUrl();
         }
     }
 
-    $configSystem = Be::getConfig('System.System');
+    $configSystem = \Be\F\Config\ConfigFactory::getInstance('System.System');
     if ($configSystem->urlRewrite) {
         $urlParams = '';
         if (count($params)) {
@@ -30,8 +29,8 @@ function beUrl($route = null, $params = [])
                 $urlParams .= '/' . $key . '-' . $val;
             }
         }
-        return $request->rootUrl() . '/' . str_replace('.', '/', $route) . $urlParams . $configSystem->urlSuffix;
+        return $request->getRootUrl() . '/' . str_replace('.', '/', $route) . $urlParams . $configSystem->urlSuffix;
     } else {
-        return $request->rootUrl() . '/?route=' . $route . (count($params) > 0 ? '&' . http_build_query($params) : '');
+        return $request->getRootUrl() . '/?route=' . $route . (count($params) > 0 ? '&' . http_build_query($params) : '');
     }
 }

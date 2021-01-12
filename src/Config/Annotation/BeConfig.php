@@ -1,5 +1,5 @@
 <?php
-namespace Be\F\Annotation;
+namespace Be\F\Config\Annotation;
 
 /**
  * 配置

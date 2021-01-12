@@ -246,9 +246,7 @@ class Driver
 
     public function isAjax()
     {
-        return (
-        (isset($this->request->header['accept']) && strpos(strtolower($this->request->header['accept']), 'application/json') !== false)
-        ) ? true : false;
+        return ((isset($this->request->header['accept']) && strpos(strtolower($this->request->header['accept']), 'application/json') !== false)) ? true : false;
     }
 
     public function getMethod()
@@ -274,13 +272,14 @@ class Driver
      */
     public function getIp(bool $detectProxy = true)
     {
-        return  $this->request->server['remote_addr'];
+        return $this->request->server['remote_addr'];
     }
 
     /**
      * 获取当前请求的完整网址
      */
-    public function getRootUrl() {
+    public function getRootUrl()
+    {
         $url = 'http://';
         $url .= $this->request->header['host'];
         return $url;
@@ -289,7 +288,8 @@ class Driver
     /**
      * 获取data数据目录的网址
      */
-    public function getDataUrl() {
+    public function getDataUrl()
+    {
         return $this->getRootUrl() . '/' . RuntimeFactory::getInstance()->getDataDir();
     }
 
