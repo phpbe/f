@@ -2,6 +2,8 @@
 
 namespace Be\F\Logger\Processor;
 
+use Be\F\Request\RequestFactory;
+use Be\F\Runtime\RuntimeFactory;
 use Be\F\Util\FileSystem\FileSize;
 use Monolog\Logger;
 
@@ -43,28 +45,32 @@ class FileProcessor
 
         $record['extra']['hash'] = $hash;
 
+        $request = RequestFactory::getInstance();
         if (isset($config->get) && $config->get) {
-            $record['extra']['get'] = &$_GET;
+            $record['extra']['get'] = $request->get();
         }
 
         if (isset($config->post) && $config->post) {
-            $record['extra']['post'] = &$_POST;
+            $record['extra']['post'] = $request->post();
         }
 
         if (isset($config->request) && $config->request) {
-            $record['extra']['request'] = &$_REQUEST;
+            $record['extra']['request'] = $request->request();
         }
 
         if (isset($config->cookie) && $config->cookie) {
-            $record['extra']['cookie'] = &$_COOKIE;
+            $record['extra']['cookie'] = $request->cookie();
         }
 
-        if (isset($config->session) && $config->session) {
-            $record['extra']['session'] = &$_SESSION;
+        if (RuntimeFactory::getInstance()->getFrameworkName() != 'Sf') {
+            if (isset($config->session) && $config->session) {
+                $session = \Be\F\Session\SessionFactory::getInstance();
+                $record['extra']['session'] = $session->get();
+            }
         }
 
         if (isset($config->server) && $config->server) {
-            $record['extra']['server'] = &$_SERVER;
+            $record['extra']['server'] = $request->server();
         }
 
         if (isset($config->memery) && $config->memery) {

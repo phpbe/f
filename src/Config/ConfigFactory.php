@@ -3,6 +3,7 @@
 namespace Be\F\Config;
 
 use Be\F\Runtime\RuntimeException;
+use Be\F\Runtime\RuntimeFactory;
 
 /**
  * Config工厂
@@ -40,12 +41,14 @@ abstract class ConfigFactory
         $appName = $parts[0];
         $configName = $parts[1];
 
-        $class = 'Be\\Data\\' . $appName . '\\Config\\' . $configName;
+        $frameworkName = RuntimeFactory::getInstance()->getFrameworkName();
+
+        $class = 'Be\\' . $frameworkName . '\\Data\\' . $appName . '\\Config\\' . $configName;
         if (class_exists($class)) {
             return new $class();
         }
 
-        $class = 'Be\\App\\' . $appName . '\\Config\\' . $configName;
+        $class = 'Be\\' . $frameworkName . '\\App\\' . $appName . '\\Config\\' . $configName;
         if (class_exists($class)) {
             return new $class();
         }

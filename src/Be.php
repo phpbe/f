@@ -18,8 +18,6 @@ use Be\F\Runtime\RuntimeFactory;
 abstract class Be
 {
 
-    public static $cache = []; // 缓存资源实例
-
     /**
      * 获取运行时对象
      *

@@ -2,9 +2,9 @@
 
 namespace Be\F\Logger\Handler;
 
+use Be\F\Runtime\RuntimeFactory;
 use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
-use Be\F\Be;
 
 class FileHandler extends AbstractProcessingHandler
 {
@@ -25,7 +25,7 @@ class FileHandler extends AbstractProcessingHandler
         $month = date('m', $t);
         $day = date('d', $t);
 
-        $dir = Be::getRuntime()->dataPath() . '/System/Log/' .  $year . '/' . $month . '/' . $day . '/';
+        $dir = RuntimeFactory::getInstance()->getDataPath() . '/System/Log/' .  $year . '/' . $month . '/' . $day . '/';
         if (!is_dir($dir)) {
             mkdir($dir, 0755, true);
             chmod($dir, 0755);

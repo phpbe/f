@@ -12,32 +12,32 @@ class Config
     public $level = 'debug';
 
     /**
-     * @BeConfigItem("记录 $_GET", driver="FormItemSwitch")
+     * @BeConfigItem("记录 GET", driver="FormItemSwitch")
      */
     public $get = true;
 
     /**
-     * @BeConfigItem("记录 $_POST", driver="FormItemSwitch")
+     * @BeConfigItem("记录 POST", driver="FormItemSwitch")
      */
     public $post = true;
 
     /**
-     * @BeConfigItem("记录 $_REQUEST", driver="FormItemSwitch")
+     * @BeConfigItem("记录 REQUEST", driver="FormItemSwitch")
      */
     public $request = true;
 
     /**
-     * @BeConfigItem("记录 $_COOKIE", driver="FormItemSwitch")
+     * @BeConfigItem("记录 COOKIE", driver="FormItemSwitch")
      */
     public $cookie = true;
 
     /**
-     * @BeConfigItem("记录 $_SESSION", driver="FormItemSwitch")
+     * @BeConfigItem("记录 SESSION", driver="FormItemSwitch")
      */
     public $session = true;
 
     /**
-     * @BeConfigItem("记录 $_SERVER", driver="FormItemSwitch")
+     * @BeConfigItem("记录 SERVER", driver="FormItemSwitch")
      */
     public $server = true;
 

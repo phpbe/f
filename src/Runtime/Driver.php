@@ -10,6 +10,9 @@ namespace Be\F\Runtime;
  */
 class Driver
 {
+
+    protected $frameworkName = 'F'; // 框架名称 Mf/Sf/Ff
+
     protected $rootPath = null;
 
     protected $dataDir = 'data';
@@ -18,6 +21,16 @@ class Driver
 
     public function __construct()
     {
+    }
+
+    /**
+     * 获取框架名称
+     *
+     * @return string
+     */
+    public function getFrameworkName()
+    {
+        return $this->frameworkName;
     }
 
     /**
@@ -87,7 +100,6 @@ class Driver
     {
         return $this->cacheDir;
     }
-
 
     public function execute() {
 
