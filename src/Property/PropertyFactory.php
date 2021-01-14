@@ -3,6 +3,7 @@
 namespace Be\F\Property;
 
 use Be\F\Runtime\RuntimeException;
+use Be\F\Runtime\RuntimeFactory;
 
 
 /**
@@ -24,13 +25,23 @@ abstract class PropertyFactory
     {
         if (isset(self::$cache[$name])) return self::$cache[$name];
 
+        $frameworkName = RuntimeFactory::getInstance()->getFrameworkName();
         $parts = explode('.', $name);
-        $class = 'Be\\' . implode('\\', $parts) . '\\Property';
+        $class = 'Be\\' . $frameworkName . '\\' . implode('\\', $parts) . '\\Property';
         if (!class_exists($class)) throw new RuntimeException('属性 ' . $name . ' 不存在！');
         $instance = new $class();
 
         self::$cache[$name] = $instance;
         return self::$cache[$name];
+    }
+
+    /**
+     * 回收资源
+     */
+    public static function recycle()
+    {
+        $cid = \Swoole\Coroutine::getuid();
+        unset(self::$cache[$cid]);
     }
 
 }

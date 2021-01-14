@@ -36,5 +36,13 @@ abstract class ResponseFactory
         self::$cache[$cid] = $instance;
     }
 
+    /**
+     * 回收资源
+     */
+    public static function recycle()
+    {
+        $cid = \Swoole\Coroutine::getuid();
+        unset(self::$cache[$cid]);
+    }
 
 }

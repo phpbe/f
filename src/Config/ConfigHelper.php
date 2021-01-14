@@ -13,14 +13,17 @@ class ConfigHelper
      * @param string $name 配置名称，格式：应用名.配置名
      * @param object $instance 配置实例
      */
-    public function save($name, $instance)
+    public function update($name, $instance)
     {
         $parts = explode('.', $name);
         $appName = $parts[0];
         $configName = $parts[1];
 
+        $runtime = RuntimeFactory::getInstance();
+        $frameworkName = $runtime->getFrameworkName();
+
         $code = "<?php\n";
-        $code .= 'namespace Be\\Data\\' . $appName . '\\Config;' . "\n\n";
+        $code .= 'namespace Be\\' . $frameworkName . '\\Data\\' . $appName . '\\Config;' . "\n\n";
         $code .= 'class ' . $configName . "\n";
         $code .= "{\n";
 
@@ -30,7 +33,7 @@ class ConfigHelper
         }
         $code .= "}\n";
 
-        $path = RuntimeFactory::getInstance()->getDataPath() . '/' . $appName . '/Config/' . $configName . '.php';
+        $path = $runtime->getDataPath() . '/' . $appName . '/Config/' . $configName . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) mkdir($dir, 0755, true);
         file_put_contents($path, $code, LOCK_EX);

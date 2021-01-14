@@ -11,27 +11,26 @@ use Be\F\Runtime\RuntimeFactory;
 abstract class ConfigFactory
 {
 
-    public static $cache = []; // 缓存资源实例
+    private static $cache = []; // 缓存资源实例
 
     /**
      * 获取指定的配置文件
      *
-     * @param string $name 配置文件名
+     * @param string $name 名称
      * @return mixed
      * @throws RuntimeException
      */
     public static function getInstance($name)
     {
-        $cid = \Swoole\Coroutine::getuid();
-        if (isset(self::$cache[$cid][$name])) return self::$cache[$cid][$name];
-        self::$cache[$cid][$name] = self::newInstance($name);
-        return self::$cache[$cid][$name];
+        if (isset(self::$cache[$name])) return self::$cache[$name];
+        self::$cache[$name] = self::newInstance($name);
+        return self::$cache[$name];
     }
 
     /**
      * 新创建一个指定的配置文件
      *
-     * @param string $name 配置文件名
+     * @param string $name 名称
      * @return mixed
      * @throws RuntimeException
      */
