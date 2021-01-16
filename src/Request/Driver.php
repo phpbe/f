@@ -261,7 +261,10 @@ class Driver
     {
         $url = 'http://';
         $url .= $this->request->header['host'];
-        $url .= $_SERVER['REQUEST_URI'];
+        $url .= $this->request->server['request_uri'];
+        if ($this->request->server['query_string']) {
+            $url .= '?' . $this->request->server['query_string'];
+        }
         return $url;
     }
 

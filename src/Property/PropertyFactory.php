@@ -35,13 +35,4 @@ abstract class PropertyFactory
         return self::$cache[$name];
     }
 
-    /**
-     * 回收资源
-     */
-    public static function recycle()
-    {
-        $cid = \Swoole\Coroutine::getuid();
-        unset(self::$cache[$cid]);
-    }
-
 }
