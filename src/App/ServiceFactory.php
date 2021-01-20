@@ -46,7 +46,7 @@ abstract class ServiceFactory
      *
      * @param string $key 为null时回收当前协程的所有私有资源
      */
-    public static function recycle($key = null)
+    public static function release($key = null)
     {
         $cid = \Swoole\Coroutine::getuid();
         if ($key === null) {

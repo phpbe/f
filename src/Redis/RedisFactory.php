@@ -14,6 +14,42 @@ abstract class RedisFactory
 
     private static $cache = [];
 
+    private static $pools = null;
+
+    public static function init()
+    {
+        if (self::$pools === null) {
+            self::$pools = [];
+            $config = ConfigFactory::getInstance('System.Redis');
+            foreach ($config as $k => $v) {
+
+                $redisConfig = new \Swoole\Database\RedisConfig();
+
+                $redisConfig->withHost($v['host']);
+
+                if (isset($v['port'])) {
+                    $redisConfig->withPort($v['port']);
+                }
+
+                if (isset($v['auth']) && $v['auth']) {
+                    $redisConfig->withAuth($v['auth']);
+                }
+
+                if (isset($v['db']) && $v['db']) {
+                    $redisConfig->withDbIndex($v['db']);
+                }
+
+                if (isset($v['timeout']) && $v['timeout']) {
+                    $redisConfig->withTimeout($v['timeout']);
+                }
+
+                $poolSize = isset($v['poolSize']) ? $v['poolSize'] : 8;
+
+                self::$pools[$k] = new \Swoole\Database\RedisPool($redisConfig, $poolSize);
+            }
+        }
+    }
+
     /**
      * 获取Redis对象
      *
@@ -25,7 +61,11 @@ abstract class RedisFactory
     {
         $cid = \Swoole\Coroutine::getuid();
         if (isset(self::$cache[$cid][$name])) return self::$cache[$cid][$name];
-        self::$cache[$cid][$name] = self::newInstance($name);
+
+        $pool = self::$pools[$name];
+        $redis = $pool->get();
+        $driver = new \Be\F\Redis\Driver($name, $redis);
+        self::$cache[$cid][$name] = $driver;
         return self::$cache[$cid][$name];
     }
 
@@ -43,16 +83,29 @@ abstract class RedisFactory
             throw new RuntimeException('Redis配置项（' . $name . '）不存在！');
         }
 
-        return new \Be\F\Redis\Driver($config->$name);
+        return new \Be\F\Redis\Driver($name);
     }
 
     /**
      * 回收资源
      */
-    public static function recycle()
+    public static function release()
     {
         $cid = \Swoole\Coroutine::getuid();
-        unset(self::$cache[$cid]);
+        if (isset(self::$cache[$cid])) {
+            foreach (self::$cache[$cid] as $name => $driver) {
+                if (isset(self::$pools[$name])) {
+                    $pool = self::$pools[$name];
+
+                    /**
+                     * @var Driver $driver
+                     */
+                    $redis = $driver->getRedis();
+                    $driver->release();
+                    $pool->put($redis);
+                }
+            }
+        }
     }
 
 }

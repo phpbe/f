@@ -2,70 +2,65 @@
 
 namespace Be\F\Redis;
 
+use Be\F\Config\ConfigFactory;
+
 /**
  * Redis 类
  */
 class Driver
 {
 
-    private $handler = null; // 数据库连接
-
-    protected $config = [];
-
-    public function __construct($config)
-    {
-        $this->config = $config;
-    }
-
     /**
-     * 连接数据库
-     *
-     * @throws RedisException
+     * @var \Redis
      */
-    public function connect()
+    private $redis = null; // 数据库连接
+
+    public function __construct($name, $redis = null)
     {
-        if ($this->handler === null) {
+        $this->name = $name;
+        if ($redis === null) {
 
-            if (!extension_loaded('Redis')) throw new RedisException('服务器未安装 Redis 扩展！');
+            $config = ConfigFactory::getInstance('System.Redis');
+            if (!isset($config->$name)) {
+                throw new RedisException('数据库配置项（' . $name . '）不存在！');
+            }
+            $config = $config->$name;
 
-            $config = $this->config;
-
-            $handler = new \Redis();
+            $redis = new \Redis();
             if (isset($config['timeout']) && $config['timeout'] > 0) {
-                if (!$handler->connect($config['host'], $config['port'], $config['timeout'])) {
+                if (!$redis->connect($config['host'], $config['port'], $config['timeout'])) {
                     throw new RedisException('连接Redis（' . $config['host'] . ':' . $config['port'] . '）失败！');
                 }
             } else {
-                if (!$handler->connect($config['host'], $config['port'])){
+                if (!$redis->connect($config['host'], $config['port'])){
                     throw new RedisException('连接Redis（' . $config['host'] . ':' . $config['port'] . '）失败！');
                 }
             }
 
             if (isset($config['auth']) && $config['auth'] != '') {
-                if (!$handler->auth($config['auth'])) {
+                if (!$redis->auth($config['auth'])) {
                     throw new RedisException('Redis（' . $config['host'] . ':' . $config['port'] . '）验证密码失败！');
                 }
             }
 
             if (isset($config['db']) && $config['db'] != 0) {
-                $handler->select($config['db']);
+                $redis->select($config['db']);
             }
 
-            $this->handler = $handler;
+            $this->redis = $redis;
+        } else {
+            $this->redis = $redis;
         }
     }
-
-
 
     /**
      * 获取 redis 实例
      *
      * @return \redis
      */
-    public function getHandler()
+    public function getRedis()
     {
-        $this->connect();
-        return $this->handler;
+        return $this->redis;
     }
 
     /**
@@ -77,8 +72,21 @@ class Driver
      */
     public function __call($fn, $args)
     {
-        $this->connect();
-        return call_user_func_array(array($this->handler, $fn), $args);
+        return call_user_func_array(array($this->redis, $fn), $args);
+    }
+
+    /**
+     * 关闭
+     */
+    public function close() {
+        $this->redis->close();
+    }
+
+    /**
+     * 释放，释放后可被连接池回收
+     */
+    public function release() {
+        $this->redis = null;
     }
 
 }
