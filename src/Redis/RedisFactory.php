@@ -62,6 +62,11 @@ abstract class RedisFactory
         $cid = \Swoole\Coroutine::getuid();
         if (isset(self::$cache[$cid][$name])) return self::$cache[$cid][$name];
 
+        $config = ConfigFactory::getInstance('System.Redis');
+        if (!isset($config->$name)) {
+            throw new RuntimeException('Redis配置项（' . $name . '）不存在！');
+        }
+
         $pool = self::$pools[$name];
         $redis = $pool->get();
         $driver = new \Be\F\Redis\Driver($name, $redis);
