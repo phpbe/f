@@ -13,7 +13,7 @@ class ConfigHelper
      * @param string $name 配置名称，格式：应用名.配置名
      * @param object $instance 配置实例
      */
-    public function update($name, $instance)
+    public static function update($name, $instance)
     {
         $parts = explode('.', $name);
         $appName = $parts[0];
