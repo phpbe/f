@@ -34,7 +34,7 @@ class Driver
     {
         if ($this->logger === null) {
 
-            $configSystemLog = ConfigFactory::getInstance('System.Log');
+            $configSystemLog = ConfigFactory::getInstance('System.Logger');
 
             $level = Logger::DEBUG;
             if (isset($configSystemLog->level)) {
