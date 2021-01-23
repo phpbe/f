@@ -22,6 +22,10 @@ abstract class RedisFactory
             self::$pools = [];
             $config = ConfigFactory::getInstance('System.Redis');
             foreach ($config as $k => $v) {
+                $size = isset($v['pool']) ? intval($v['pool']) : 0;
+                if ($size <= 0) {
+                    continue;
+                }
 
                 $redisConfig = new \Swoole\Database\RedisConfig();
 
@@ -43,9 +47,7 @@ abstract class RedisFactory
                     $redisConfig->withTimeout($v['timeout']);
                 }
 
-                $poolSize = isset($v['poolSize']) ? $v['poolSize'] : 8;
-
-                self::$pools[$k] = new \Swoole\Database\RedisPool($redisConfig, $poolSize);
+                self::$pools[$k] = new \Swoole\Database\RedisPool($redisConfig, $size);
             }
         }
     }
@@ -67,9 +69,15 @@ abstract class RedisFactory
             throw new RuntimeException('Redis配置项（' . $name . '）不存在！');
         }
 
-        $pool = self::$pools[$name];
-        $redis = $pool->get();
-        $driver = new \Be\F\Redis\Driver($name, $redis);
+        $driver = null;
+        if (isset(self::$pools[$name])) {
+            $pool = self::$pools[$name];
+            $redis = $pool->get();
+            $driver = new \Be\F\Redis\Driver($name, $redis);
+        } else {
+            $driver = new \Be\F\Redis\Driver($name);
+        }
+
         self::$cache[$cid][$name] = $driver;
         return self::$cache[$cid][$name];
     }
