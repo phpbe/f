@@ -49,7 +49,9 @@ abstract class ConfigFactory
 
         $class = 'Be\\' . $frameworkName . '\\App\\' . $appName . '\\Config\\' . $configName;
         if (class_exists($class)) {
-            return new $class();
+            $instance =  new $class();
+            ConfigHelper::update($name, $instance);
+            return $instance;
         }
 
         throw new RuntimeException('配置文件 ' . $name . ' 不存在！');
