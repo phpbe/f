@@ -15,7 +15,7 @@ abstract class Driver
     protected $icon = ''; // 图标
     protected $description = ''; // 描述
 
-    public $path = null; // 路径，相对于根路径
+    protected $path = null; // 路径，相对于根路径
 
     /**
      * 构造函数
