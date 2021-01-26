@@ -50,7 +50,7 @@ abstract class ConfigFactory
         $class = 'Be\\' . $frameworkName . '\\App\\' . $appName . '\\Config\\' . $configName;
         if (class_exists($class)) {
             $instance =  new $class();
-            ConfigHelper::update($name, $instance);
+            // ConfigHelper::update($name, $instance);
             return $instance;
         }
 
