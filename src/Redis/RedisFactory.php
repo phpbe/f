@@ -85,7 +85,7 @@ abstract class RedisFactory
     /**
      * 新创建一个Redis对象
      *
-     * @param string $redis Redis名
+     * @param string $name Redis名
      * @return \Be\F\Redis\Driver
      * @throws RuntimeException
      */
