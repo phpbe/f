@@ -16,6 +16,11 @@ class Driver
 
     protected $cacheDir = 'cache';
 
+    /**
+     * @var HttpServer
+     */
+    protected $httpServer = null;
+
     public function __construct()
     {
     }
@@ -98,8 +103,14 @@ class Driver
         return $this->cacheDir;
     }
 
-    public function execute() {
+    public function execute()
+    {
 
+    }
+
+    public function getHttpServer()
+    {
+        return $this->httpServer;
     }
 
 }
