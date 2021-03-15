@@ -62,7 +62,7 @@ class Datetime
     }
 
     /**
-     * 获取下个月的时间
+     * 获取后一个月的时间
      *
      * @param string $datetime 时间 例：2000-01-31 12:00:00
      * @return string 时间 例：2000-02-29 12:00:00
@@ -73,7 +73,7 @@ class Datetime
     }
 
     /**
-     * 获取下N个月的时间
+     * 获取后N个月的时间
      *
      * @param string $datetime 时间 例：2000-01-31 12:00:00
      * @param int $n 月数
@@ -91,6 +91,11 @@ class Datetime
             while ($month > 12) {
                 $year++;
                 $month -= 12;
+            }
+        } elseif ($month <= 0) {
+            while ($month < 0) {
+                $year--;
+                $month += 12;
             }
         }
 
@@ -136,6 +141,29 @@ class Datetime
 
         $t2 = mktime(date('G', $t), date('i', $t), date('s', $t), $month, $day, $year);
         return date('Y-m-d H:i:s', $t2);
+    }
+
+    /**
+     * 获取前个月的时间
+     *
+     * @param string $datetime 时间 例：2000-01-31 12:00:00
+     * @return string 时间 例：2000-02-29 12:00:00
+     */
+    public static function getLastMonth($datetime)
+    {
+        return self::getNextNMonth($datetime, -1);
+    }
+
+    /**
+     * 获取前N个月的时间
+     *
+     * @param string $datetime 时间 例：2000-01-31 12:00:00
+     * @param int $n 月数
+     * @return string 时间 例：2000-02-29 12:00:00
+     */
+    public static function getLastNMonth($datetime, $n = 1)
+    {
+        return self::getNextNMonth($datetime, -$n);
     }
 
 }

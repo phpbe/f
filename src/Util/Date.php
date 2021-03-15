@@ -5,7 +5,7 @@ class Date
 {
 
     /**
-     * 获取下个月
+     * 获取后一个月的日期
      *
      * @param string $date 日期 例：2000-01-31
      * @return string 日期 例：2000-02-29
@@ -16,7 +16,7 @@ class Date
     }
 
     /**
-     * 获取下N个月
+     * 获取后N个月的日期
      *
      * @param string $date 日期 例：2000-01-31
      * @param int $n 月数
@@ -34,6 +34,11 @@ class Date
             while ($month > 12) {
                 $year++;
                 $month -= 12;
+            }
+        } elseif ($month <= 0) {
+            while ($month < 0) {
+                $year--;
+                $month += 12;
             }
         }
 
@@ -79,6 +84,29 @@ class Date
 
         $t2 = mktime(0, 0, 0, $month, $day, $year);
         return date('Y-m-d', $t2);
+    }
+
+    /**
+     * 获取前个月
+     *
+     * @param string $date 日期 例：2000-03-31
+     * @return string 日期 例：2000-02-29
+     */
+    public static function getLastMonth($date)
+    {
+        return self::getNextNMonth($date, -1);
+    }
+
+    /**
+     * 获取前N个月
+     *
+     * @param string $date 日期 例：2000-03-31
+     * @param int $n 月数
+     * @return string 日期 例：2000-01-31
+     */
+    public static function getLastNMonth($date, $n = 1)
+    {
+        return self::getNextNMonth($date, -$n);
     }
 
 
