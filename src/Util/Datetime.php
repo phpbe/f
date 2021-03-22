@@ -146,7 +146,7 @@ class Datetime
     /**
      * 获取前个月的时间
      *
-     * @param string $datetime 时间 例：2000-01-31 12:00:00
+     * @param string $datetime 时间 例：2000-03-31 12:00:00
      * @return string 时间 例：2000-02-29 12:00:00
      */
     public static function getLastMonth($datetime)
@@ -157,7 +157,7 @@ class Datetime
     /**
      * 获取前N个月的时间
      *
-     * @param string $datetime 时间 例：2000-01-31 12:00:00
+     * @param string $datetime 时间 例：2000-03-31 12:00:00
      * @param int $n 月数
      * @return string 时间 例：2000-02-29 12:00:00
      */
