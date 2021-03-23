@@ -1,6 +1,6 @@
 <?php
 
-namespace Be\F\Redis;
+namespace Be\F\Es;
 
 use Be\F\Config\ConfigFactory;
 use Be\F\Runtime\RuntimeException;
