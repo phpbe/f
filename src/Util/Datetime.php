@@ -166,4 +166,15 @@ class Datetime
         return self::getNextNMonth($datetime, -$n);
     }
 
+    /**
+     * 当前时间
+     *
+     * @param string $format
+     * @return false|string
+     */
+    public static function now($format = 'Y-m-d H:i:s')
+    {
+        return date($format, time());
+    }
+
 }
