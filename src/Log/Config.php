@@ -1,5 +1,5 @@
 <?php
-namespace Be\F\Logger;
+namespace Be\F\Log;
 
 
 class Config

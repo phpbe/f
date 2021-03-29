@@ -1,12 +1,12 @@
 <?php
 
-namespace Be\F\Logger;
+namespace Be\F\Log;
 
 
 /**
  * Logger 工厂
  */
-abstract class LoggerFactory
+abstract class LogFactory
 {
 
     private static $cache = [];

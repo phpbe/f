@@ -1,12 +1,12 @@
 <?php
 
-namespace Be\F\Logger;
+namespace Be\F\Log;
 
 use Be\F\Config\ConfigFactory;
 use Be\F\Runtime\RuntimeException;
 use Monolog\Logger;
-use Be\F\Logger\Handler\FileHandler;
-use Be\F\Logger\Processor\FileProcessor;
+use Be\F\Log\Handler\FileHandler;
+use Be\F\Log\Processor\FileProcessor;
 
 /**
  * 日志类
@@ -34,7 +34,7 @@ class Driver
     {
         if ($this->logger === null) {
 
-            $configSystemLog = ConfigFactory::getInstance('System.Logger');
+            $configSystemLog = ConfigFactory::getInstance('System.Log');
 
             $level = Logger::DEBUG;
             if (isset($configSystemLog->level)) {

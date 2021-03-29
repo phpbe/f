@@ -1,6 +1,6 @@
 <?php
 
-namespace Be\F\Logger\Processor;
+namespace Be\F\Log\Processor;
 
 use Be\F\Request\RequestFactory;
 use Be\F\Runtime\RuntimeFactory;

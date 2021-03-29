@@ -1,6 +1,6 @@
 <?php
 
-namespace Be\F\Logger\Handler;
+namespace Be\F\Log\Handler;
 
 use Be\F\Runtime\RuntimeFactory;
 use Monolog\Logger;
