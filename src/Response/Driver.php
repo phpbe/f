@@ -3,6 +3,7 @@
 namespace Be\F\Response;
 
 use Be\F\Request\RequestFactory;
+use Be\F\Session\SessionFactory;
 use Be\F\Template\TemplateFactory;
 
 
@@ -150,7 +151,7 @@ class Driver
             $this->set('redirectUrl', $redirectUrl);
             if ($redirectTimeout > 0) $this->set('redirectTimeout', $redirectTimeout);
         }
-
+    
         $request = RequestFactory::getInstance();
         if ($request->isAjax()) {
             $this->json();
@@ -216,8 +217,9 @@ class Driver
             $historyKey = $request->getAppName() . '.' . $request->getControllerName();
         }
 
-        $this->response->cookie('_history_url_'.$historyKey, $request->server('REQUEST_URI'));
-        $this->response->cookie('_history_post_'.$historyKey, serialize($request->post()));
+        $session = SessionFactory::getInstance();
+        $session->set('_history_url_'.$historyKey, $request->server('REQUEST_URI'));
+        $session->set('_history_post_'.$historyKey, serialize($request->post()));
     }
 
     /**
@@ -238,12 +240,19 @@ class Driver
         $this->set('message', $message);
         $this->set('historyKey', $historyKey);
 
-        $historyUrl = $request->cookie('_history_url_'.$historyKey);
+        $session = SessionFactory::getInstance();
+        $historyUrl = null;
+        if ($session->has('_history_url_'.$historyKey)) {
+            $historyUrl = $session->get('_history_url_'.$historyKey);
+        }
         if (!$historyUrl) $historyUrl = $request->server('HTTP_REFERER');
         if (!$historyUrl) $historyUrl = './';
 
-        $historyPost = $request->cookie('_history_post_'.$historyKey);
-        if ($historyPost) $historyPost = unserialize($historyPost);
+        $historyPost = null;
+        if ($session->has('_history_post_'.$historyKey)) {
+            $historyPost = $session->get('_history_post_'.$historyKey);
+            if ($historyPost) $historyPost = unserialize($historyPost);
+        }
 
         $this->set('historyUrl', $historyUrl);
         $this->set('historyPost', $historyPost);
@@ -269,12 +278,19 @@ class Driver
         $this->set('message', $message);
         $this->set('historyKey', $historyKey);
 
-        $historyUrl = $request->cookie('_history_url_'.$historyKey);
+        $session = SessionFactory::getInstance();
+        $historyUrl = null;
+        if ($session->has('_history_url_'.$historyKey)) {
+            $historyUrl = $session->get('_history_url_'.$historyKey);
+        }
         if (!$historyUrl) $historyUrl = $request->server('HTTP_REFERER');
         if (!$historyUrl) $historyUrl = './';
 
-        $historyPost = $request->cookie('_history_post_'.$historyKey);
-        if ($historyPost) $historyPost = unserialize($historyPost);
+        $historyPost = null;
+        if ($session->has('_history_post_'.$historyKey)) {
+            $historyPost = $session->get('_history_post_'.$historyKey);
+            if ($historyPost) $historyPost = unserialize($historyPost);
+        }
 
         $this->set('historyUrl', $historyUrl);
         $this->set('historyPost', $historyPost);
@@ -317,5 +333,4 @@ class Driver
         ob_end_clean();
         return $content;
     }
-
 }
