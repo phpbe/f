@@ -13,8 +13,7 @@
     ],
     "require": {
         "php": "~7.1",
-        "monolog/monolog": "~1.11",
-        "elasticsearch/elasticsearch": "^v7.11"
+        "monolog/monolog": "~1.11"
     },
     "autoload": {
         "psr-4": {
