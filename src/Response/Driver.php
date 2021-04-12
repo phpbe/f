@@ -333,4 +333,16 @@ class Driver
         ob_end_clean();
         return $content;
     }
+
+
+    /**
+     * 获取原生 Response 对像
+     *
+     * @return \Swoole\Http\Response
+     */
+    public function getReqpone()
+    {
+        return $this->response;
+    }
+
 }

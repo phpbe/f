@@ -351,5 +351,15 @@ class Driver
         $this->route = $appName . '.' . $controllerName . '.' . $actionName;
     }
 
+    /**
+     * 获取原生 Request 对像
+     *
+     * @return \Swoole\Http\Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
 }
 
