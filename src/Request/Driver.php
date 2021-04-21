@@ -289,14 +289,6 @@ class Driver
     }
 
     /**
-     * 获取data数据目录的网址
-     */
-    public function getDataUrl()
-    {
-        return $this->getRootUrl() . '/' . RuntimeFactory::getInstance()->getDataDir();
-    }
-
-    /**
      * 获取upload上传目录的网址
      */
     public function getUploadUrl()
