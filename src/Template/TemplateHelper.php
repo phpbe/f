@@ -46,13 +46,13 @@ class TemplateHelper
         $contentTemplate = file_get_contents($fileTemplate);
 
         $extends = '\\Be\\F\\Template\\Driver';
-        if (preg_match('/<be-extends\s+(.*?)\s*>/s', $contentTemplate, $matches)) {
+        if (preg_match('/<be-extends>(.*?)<\/be-extends>/s', $contentTemplate, $matches)) {
             $extends = trim($matches[1]);
             self::update($extends, $theme);
             $contentTemplate = preg_replace($matches[0], '', $contentTemplate);
         }
 
-        if (preg_match('/<be-include\s+(.*?)\s*>/s', $contentTemplate, $matches)) {
+        if (preg_match('/<be-include>(.*?)<\/be-include>/s', $contentTemplate, $matches)) {
             $i = 0;
             foreach ($matches[1] as $m) {
                 $includes = explode('.', $m);
