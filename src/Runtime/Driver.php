@@ -12,9 +12,11 @@ class Driver
 
     protected $rootPath = null;
 
-    protected $dataDir = 'data';
+    protected $cacheDir = 'cache'; // 存放临时文件
 
-    protected $cacheDir = 'cache';
+    protected $dataDir = 'data'; // 存放系统生成的永久性文件，如配置文件
+
+    protected $uploadDir = 'upload'; // 用户上传的数据
 
     /**
      * @var HttpServer
@@ -56,6 +58,30 @@ class Driver
     }
 
     /**
+     * @param string $cacheDir
+     */
+    public function setCacheDir($cacheDir)
+    {
+        $this->cacheDir = $cacheDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCacheDir()
+    {
+        return $this->cacheDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCachePath()
+    {
+        return $this->rootPath . '/' . $this->cacheDir;
+    }
+
+    /**
      * @param string $dataDir
      */
     public function setDataDir($dataDir)
@@ -80,27 +106,27 @@ class Driver
     }
 
     /**
-     * @param string $cacheDir
+     * @param string $uploadDir
      */
-    public function setCacheDir($cacheDir)
+    public function setUploadDir($uploadDir)
     {
-        $this->cacheDir = $cacheDir;
+        $this->uploadDir = $uploadDir;
     }
 
     /**
      * @return string
      */
-    public function getCachePath()
+    public function getUploadDir()
     {
-        return $this->rootPath . '/' . $this->cacheDir;
+        return $this->uploadDir;
     }
 
     /**
      * @return string
      */
-    public function getCacheDir()
+    public function getUploadPath()
     {
-        return $this->cacheDir;
+        return $this->rootPath . '/' . $this->uploadDir;
     }
 
     public function execute()

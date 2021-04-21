@@ -297,6 +297,14 @@ class Driver
     }
 
     /**
+     * 获取upload上传目录的网址
+     */
+    public function getUploadUrl()
+    {
+        return $this->getRootUrl() . '/' . RuntimeFactory::getInstance()->getUploadDir();
+    }
+
+    /**
      * 获取当前执行的 APP 名
      *
      * @return null | string
