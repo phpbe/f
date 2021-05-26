@@ -24,7 +24,8 @@ abstract class Driver
      *
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
@@ -33,7 +34,8 @@ abstract class Driver
      *
      * @return Connection
      */
-    public function getConnection() {
+    public function getConnection()
+    {
         return $this->connection;
     }
 
@@ -42,25 +44,28 @@ abstract class Driver
      *
      * @return \Pdo
      */
-    public function getPdo() {
+    public function getPdo()
+    {
         return $this->connection->getPdo();
     }
 
     /**
      * 关闭
      */
-    public function close() {
+    public function close()
+    {
         $this->connection->close();
     }
 
     /**
      * 释放
      */
-    public function release() {
+    public function release()
+    {
         $this->connection->release();
         $this->connection = null;
     }
-    
+
     /**
      * 预编译 sql 语句
      *
@@ -316,7 +321,8 @@ abstract class Driver
         } elseif (is_object($object)) {
             $vars = get_object_vars($object);
         } else {
-            throw new DbException('插入的数据格式须为对象或数组');
+            // 插入的数据格式须为对象或数组
+            throw new DbException('Db:insert - Insert data should be object or array!');
         }
 
         $fields = [];
@@ -351,7 +357,8 @@ abstract class Driver
         } elseif (is_object($object)) {
             $vars = get_object_vars($object);
         } else {
-            throw new DbException('批量插入的数据格式须为对象或数组');
+            // 批量插入的数据格式须为对象或数组
+            throw new DbException('Db:insertMany - Insert data should be object or array!');
         }
         ksort($vars);
 
@@ -369,7 +376,8 @@ abstract class Driver
             } elseif (is_object($o)) {
                 $vars = get_object_vars($o);
             } else {
-                throw new DbException('批量插入的数据格式须为对象或数组');
+                // 批量插入的数据格式须为对象或数组
+                throw new DbException('Db:insertMany - Insert data should be object or array!');
             }
             ksort($vars);
             $statement->execute(array_values($vars));
@@ -398,7 +406,8 @@ abstract class Driver
         } elseif (is_object($object)) {
             $vars = get_object_vars($object);
         } else {
-            throw new DbException('快速插入的数据格式须为对象或数组');
+            // 快速插入的数据格式须为对象或数组
+            throw new DbException('Db:quickInsert - Insert data should be object or array!');
         }
 
         $fields = [];
@@ -442,7 +451,8 @@ abstract class Driver
         } elseif (is_object($object)) {
             $vars = get_object_vars($object);
         } else {
-            throw new DbException('快速批量插入的数据格式须为对象或数组');
+            // 快速批量插入的数据格式须为对象或数组
+            throw new DbException('Db:quickInsertMany - Insert data should be object or array!');
         }
         ksort($vars);
 
@@ -460,7 +470,8 @@ abstract class Driver
             } elseif (is_object($o)) {
                 $vars = get_object_vars($o);
             } else {
-                throw new DbException('快速批量插入的数据格式须为对象或数组');
+                // 快速批量插入的数据格式须为对象或数组
+                throw new DbException('Db:quickInsertMany - Insert data should be object or array!');
             }
             ksort($vars);
             $values = array_values($vars);
@@ -501,7 +512,8 @@ abstract class Driver
         if ($primaryKey === null) {
             $primaryKey = $this->getTablePrimaryKey($table);
             if ($primaryKey === null) {
-                throw new DbException('新数据表' . $table . '无主键，不支持按主键更新！');
+                // 新数据表 $table 无主键，不支持按主键更新
+                throw new DbException('Db:update - Db table (' . $table . ') no primary key, not support update with primary key!');
             }
         }
 
@@ -511,7 +523,8 @@ abstract class Driver
         } elseif (is_object($object)) {
             $vars = get_object_vars($object);
         } else {
-            throw new DbException('更新的数据格式须为对象或数组');
+            // 更新的数据格式须为对象或数组
+            throw new DbException('Db:update - Update data should be object or array!');
         }
 
         foreach ($vars as $key => $value) {
@@ -542,7 +555,8 @@ abstract class Driver
         }
 
         if (!$where) {
-            throw new DbException('更新数据时未指定条件！');
+            // 更新数据时未指定条件！
+            throw new DbException('Db:update - Missing where conditions!');
         }
 
         $sql = 'UPDATE ' . $this->connection->quoteKey($table) . ' SET ' . implode(',', $fields) . ' WHERE ' . implode(' AND ', $where);
@@ -572,7 +586,8 @@ abstract class Driver
         if ($primaryKey === null) {
             $primaryKey = $this->getTablePrimaryKey($table);
             if ($primaryKey === null) {
-                throw new DbException('新数据表' . $table . '无主键，不支持按主键更新！');
+                // 新数据表 $table 无主键，不支持按主键更新
+                throw new DbException('Db:quickUpdate - Db table (' . $table . ') no primary key, not support update with primary key!');
             }
         }
 
@@ -582,7 +597,8 @@ abstract class Driver
         } elseif (is_object($object)) {
             $vars = get_object_vars($object);
         } else {
-            throw new DbException('更新的数据格式须为对象或数组');
+            // 更新的数据格式须为对象或数组
+            throw new DbException('Db:quickUpdate - Update data should be object or array!');
         }
 
         foreach ($vars as $key => $value) {
@@ -614,7 +630,8 @@ abstract class Driver
         }
 
         if (!$where) {
-            throw new DbException('更新数据时未指定条件！');
+            // 更新数据时未指定条件
+            throw new DbException('Db:quickUpdate - Missing where conditions!');
         }
 
         $sql = 'UPDATE ' . $this->connection->quoteKey($table) . ' SET ' . implode(',', $fields) . ' WHERE ' . implode(' AND ', $where);
@@ -641,7 +658,8 @@ abstract class Driver
         if ($primaryKey === null) {
             $primaryKey = $this->getTablePrimaryKey($table);
             if ($primaryKey === null) {
-                throw new DbException('新数据表' . $table . '无主键，不支持按主键更新！');
+                // 新数据表 $table 无主键，不支持按主键更新
+                throw new DbException('Db:updateMany - Table (' . $table . ') no primary key, not support update with primary key!');
             }
         }
 
@@ -653,7 +671,8 @@ abstract class Driver
         } elseif (is_object($object)) {
             $vars = get_object_vars($object);
         } else {
-            throw new DbException('批量更新的数据格式须为对象或数组');
+            // 批量更新的数据格式须为对象或数组
+            throw new DbException('Db:updateMany -  Update data should be object or array!');
         }
         ksort($vars);
 
@@ -681,7 +700,8 @@ abstract class Driver
         }
 
         if (!$where) {
-            throw new DbException('更新数据时未指定条件！');
+            // 更新数据时未指定条件
+            throw new DbException('Db:updateMany - Missing where conditions!');
         }
 
         $sql = 'UPDATE ' . $this->connection->quoteKey($table) . ' SET ' . implode(',', $fields) . ' WHERE ' . implode(' AND ', $where);
@@ -695,7 +715,8 @@ abstract class Driver
             } elseif (is_object($o)) {
                 $vars = get_object_vars($o);
             } else {
-                throw new DbException('批量更新的数据格式须为对象或数组');
+                // 批量更新的数据格式须为对象或数组
+                throw new DbException('Db:updateMany - Update data should be object or array!');
             }
             ksort($vars);
 
@@ -726,11 +747,13 @@ abstract class Driver
             }
 
             if (count($whereValue) != count($where)) {
-                throw new DbException('批量更新的数组未包含必须的主键名！');
+                // 批量更新的数组未包含必须的主键名
+                throw new DbException('Db:updateMany - Update data missing primary key!');
             }
 
             if (count($fieldValues) != count($fields)) {
-                throw new DbException('批量更新的数组内部结构不一致！');
+                // 批量更新的数组内部结构不一致
+                throw new DbException('Db:updateMany - Update data items have different structure!');
             }
 
             $fieldValues = array_merge($fieldValues, $whereValue);
@@ -758,7 +781,8 @@ abstract class Driver
         if ($primaryKey === null) {
             $primaryKey = $this->getTablePrimaryKey($table);
             if ($primaryKey === null) {
-                throw new DbException('新数据表' . $table . '无主键，不支持快速批量更新！');
+                // 新数据表 $table 无主键，不支持按主键更新
+                throw new DbException('Db:quickUpdateMany - Table (' . $table . ') no primary key, not support update with primary key!');
             }
         }
 
@@ -771,7 +795,8 @@ abstract class Driver
         } elseif (is_object($object)) {
             $vars = get_object_vars($object);
         } else {
-            throw new DbException('快速批量更新的数据结构须为对象或数组');
+            // 快速批量更新的数据结构须为对象或数组
+            throw new DbException('Db:quickUpdateMany - Update data should be object or array!');
         }
         ksort($vars);
         $fields = array_keys($vars);
@@ -780,12 +805,14 @@ abstract class Driver
         if (is_array($primaryKey)) {
             foreach ($primaryKey as $pKey) {
                 if (!in_array($pKey, $fields)) {
-                    throw new DbException('快速批量更新的数据结构中未包念主键' . $pKey . '！');
+                    // 快速批量更新的数据结构中未包念主键 $pKey
+                    throw new DbException('Db:quickUpdateMany - Update data missing primary key: ' . $pKey . '!');
                 }
             }
         } else {
             if (!in_array($primaryKey, $fields)) {
-                throw new DbException('快速批量更新的数据结构中未包念主键' . $primaryKey . '！');
+                // 快速批量更新的数据结构中未包念主键 $primaryKey
+                throw new DbException('Db:quickUpdateMany - Update data missing primary key: ' . $primaryKey . '!');
             }
         }
 
@@ -814,13 +841,15 @@ abstract class Driver
             } elseif (is_object($o)) {
                 $vars = get_object_vars($o);
             } else {
-                throw new DbException('批量更新的数据结构须为对象或数组');
+                // 批量更新的数据结构须为对象或数组
+                throw new DbException('Db:quickUpdateMany - Update data should be object or array!');
             }
             ksort($vars);
 
             foreach ($fields as $field) {
                 if (!isset($vars[$field])) {
-                    throw new DbException('批量更新的数据结构不一致');
+                    // 批量更新的数据结构不一致
+                    throw new DbException('Db:quickUpdateMany - Update data items have different structure!');
                 }
 
                 if (is_array($primaryKey)) {
@@ -830,13 +859,13 @@ abstract class Driver
 
                     $when = [];
                     foreach ($primaryKey as $pKey) {
-                        $when[] = $this->connection->quoteKey($pKey) . '=' . $this->connection->quoteValue($vars[$pKey]);
+                        $when[] = $this->connection->quoteKey($pKey) . ' = ' . $this->connection->quoteValue($vars[$pKey]);
                     }
 
                     if ($vars[$field] === null) {
-                        $caseMapping[$field][] = 'WHEN ' . implode(' AND ', $when) . ' THEN null';
+                        $caseMapping[$field][] = 'WHEN ' . implode(' and ', $when) . ' THEN null';
                     } else {
-                        $caseMapping[$field][] = 'WHEN ' . implode(' AND ', $when) . ' THEN ' . $this->connection->quoteValue($vars[$field]);
+                        $caseMapping[$field][] = 'WHEN ' . implode(' and ', $when) . ' THEN ' . $this->connection->quoteValue($vars[$field]);
                     }
 
                 } else {
@@ -865,7 +894,7 @@ abstract class Driver
         }
 
         foreach ($caseMapping as $field => $cases) {
-            $sql .= $this->connection->quoteKey($field) . ' = CASE ';
+            $sql .= $this->connection->quoteKey($field) . ' = case ';
 
             if (!is_array($primaryKey)) {
                 $sql .= $this->connection->quoteKey($primaryKey) . ' ';

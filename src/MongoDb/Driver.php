@@ -26,7 +26,7 @@ class Driver
     public function connect()
     {
         if ($this->connection === null) {
-            if (!extension_loaded('mongoDb')) throw new MongoDBException('服务器未安装mongoDb扩展！');
+            if (!extension_loaded('mongoDb')) throw new MongoDBException('MongoDb extension missing!');
 
             $config = $this->config;
 
@@ -81,7 +81,7 @@ class Driver
     {
         $this->connect();
 
-        if ($this->db === null) throw new MongoDBException('未选择数据库！');
+        if ($this->db === null) throw new MongoDBException('No db selected!');
 
         $db = $this->db;
         $this->collection = $db->$collection; // 选择数据库
@@ -99,8 +99,8 @@ class Driver
     {
         $this->connect();
 
-        if ($this->db === null) throw new MongoDBException('未选择数据库！');
-        if ($this->collection === null) throw new MongoDBException('未选择集合！');
+        if ($this->db === null) throw new MongoDBException('No db selected!');
+        if ($this->collection === null) throw new MongoDBException('No collection selected!');
 
         return call_user_func_array(array($this->collection, $fn), $args);
     }

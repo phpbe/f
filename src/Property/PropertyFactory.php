@@ -28,7 +28,7 @@ abstract class PropertyFactory
         $frameworkName = RuntimeFactory::getInstance()->getFrameworkName();
         $parts = explode('.', $name);
         $class = 'Be\\' . $frameworkName . '\\' . implode('\\', $parts) . '\\Property';
-        if (!class_exists($class)) throw new RuntimeException('属性 ' . $name . ' 不存在！');
+        if (!class_exists($class)) throw new RuntimeException('Property ' . $name . ' doesn\'t exist!');
         $instance = new $class();
 
         self::$cache[$name] = $instance;

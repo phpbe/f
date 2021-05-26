@@ -26,7 +26,7 @@ abstract class SessionFactory
             $config = ConfigFactory::getInstance('System.Session');
             $driver = '\\Be\\F\\Session\\Driver\\' . $config->driver;
             if (!class_exists($driver)) {
-                throw new SessionException('Session 驱动类' . $config->driver . '不存在！');
+                throw new SessionException('Session driver' . $config->driver . ' doesn\'t exist!');
             }
 
             self::$cache[$cid] = new $driver($config);

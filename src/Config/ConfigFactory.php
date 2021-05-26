@@ -54,7 +54,7 @@ abstract class ConfigFactory
             return $instance;
         }
 
-        throw new RuntimeException('配置文件 ' . $name . ' 不存在！');
+        throw new RuntimeException('Config ' . $name . ' doesn\t exist!');
     }
 
 }

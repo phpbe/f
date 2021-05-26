@@ -25,7 +25,7 @@ abstract class CacheFactory
             $config = ConfigFactory::getInstance('System.Cache');
             $driver = '\\Be\\F\\Cache\\Driver\\' . $config->driver;
             if (!class_exists($driver)) {
-                throw new CacheException('Cache 驱动类' . $config->driver . '不存在！');
+                throw new CacheException('Cache driver' . $config->driver . ' doesn\'t exist!');
             }
 
             self::$cache[$cid] = new $driver($config);

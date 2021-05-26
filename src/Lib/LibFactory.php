@@ -42,7 +42,7 @@ abstract class LibFactory
         } else {
             $class = $name;
         }
-        if (!class_exists($class)) throw new RuntimeException('库 ' . $class . ' 不存在！');
+        if (!class_exists($class)) throw new RuntimeException('Lib ' . $class . ' doesn\'t exist!');
 
         return new $class();
     }

@@ -22,24 +22,24 @@ class Driver
 
             $config = ConfigFactory::getInstance('System.Redis');
             if (!isset($config->$name)) {
-                throw new RedisException('数据库配置项（' . $name . '）不存在！');
+                throw new RedisException('Redis config item (' . $name . ') doesn\'t exist!');
             }
             $config = $config->$name;
 
             $redis = new \Redis();
             if (isset($config['timeout']) && $config['timeout'] > 0) {
                 if (!$redis->connect($config['host'], $config['port'], $config['timeout'])) {
-                    throw new RedisException('连接Redis（' . $config['host'] . ':' . $config['port'] . '）失败！');
+                    throw new RedisException('Connect redis (' . $config['host'] . ':' . $config['port'] . ') fail!');
                 }
             } else {
                 if (!$redis->connect($config['host'], $config['port'])){
-                    throw new RedisException('连接Redis（' . $config['host'] . ':' . $config['port'] . '）失败！');
+                    throw new RedisException('Connect redis (' . $config['host'] . ':' . $config['port'] . ') fail!');
                 }
             }
 
             if (isset($config['auth']) && $config['auth'] != '') {
                 if (!$redis->auth($config['auth'])) {
-                    throw new RedisException('Redis（' . $config['host'] . ':' . $config['port'] . '）验证密码失败！');
+                    throw new RedisException('Redis（' . $config['host'] . ':' . $config['port'] . '）authentication fail!');
                 }
             }
 

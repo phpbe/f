@@ -24,7 +24,7 @@ class TemplateHelper
 
         $fileTheme = $runtime->getRootPath() . $themeProperty->getPath() . '/' . $theme . '.php';
         if (!file_exists($fileTheme)) {
-            throw new RuntimeException('主题 ' . $theme . ' 不存在！');
+            throw new RuntimeException('Theme ' . $theme . ' doesn\'t exist!');
         }
 
         $parts = explode('.', $template);
@@ -35,7 +35,7 @@ class TemplateHelper
         $fileTemplate = $runtime->getRootPath() . $property->getPath() . '/Template/' . implode('/', $parts) . '.php';
 
         if (!file_exists($fileTemplate)) {
-            throw new RuntimeException('模板 ' . $template . ' 不存在！');
+            throw new RuntimeException('Template ' . $template . ' doesn\'t exist!');
         }
 
         $path = $runtime->getCachePath() . '/Template/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
@@ -63,7 +63,8 @@ class TemplateHelper
                     $tmpProperty = PropertyFactory::getInstance($tmpType . '.' . $tmpName);
                     $fileInclude = $runtime->getRootPath() . $tmpProperty->getPath() . '/Template/' . implode('/', $includes) . '.php';
                     if (!file_exists($fileInclude)) {
-                        throw new RuntimeException('模板中包含的文件 ' . $m . ' 不存在！');
+                        // 模板中包含的文件 $m 不存在
+                        throw new RuntimeException('Template include file ' . $m . ' doesn\'t exist!');
                     }
 
                     $contentInclude = file_get_contents($fileInclude);

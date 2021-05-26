@@ -66,7 +66,7 @@ abstract class RedisFactory
 
         $config = ConfigFactory::getInstance('System.Redis');
         if (!isset($config->$name)) {
-            throw new RuntimeException('Redis配置项（' . $name . '）不存在！');
+            throw new RuntimeException('Redis config item (' . $name . ') doesn\'t exist!');
         }
 
         $driver = null;
@@ -93,7 +93,7 @@ abstract class RedisFactory
     {
         $config = ConfigFactory::getInstance('System.Redis');
         if (!isset($config->$name)) {
-            throw new RuntimeException('Redis配置项（' . $name . '）不存在！');
+            throw new RuntimeException('Redis config item (' . $name . ') doesn\'t exist!');
         }
 
         return new \Be\F\Redis\Driver($name);

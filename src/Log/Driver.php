@@ -116,7 +116,8 @@ class Driver
                 $level = Logger::EMERGENCY;
                 break;
             default:
-                throw new RuntimeException('不支持的系统日志方法：' . $name . '！');
+                // 不支持的系统日志方法
+                throw new RuntimeException('not support method ' . $name . '!');
         }
 
         /**

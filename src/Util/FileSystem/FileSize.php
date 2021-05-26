@@ -67,7 +67,8 @@ class FileSize
         } else {
 
             if (!in_array($unit, ['B', 'K', 'M', 'G', 'T', 'P', 'KB', 'MB', 'GB', 'TB', 'PB'])) {
-                throw new \Exception('不支持的文件尺寸单位！');
+                // 不支持的文件尺寸单位
+                throw new \Exception('Not support file size unit: ' . $unit . '!');
             }
 
             switch ($unit) {

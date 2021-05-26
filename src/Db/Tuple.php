@@ -38,7 +38,8 @@ abstract class Tuple
     public function bind($data)
     {
         if (!is_object($data) && !is_array($data)) {
-            throw new TupleException('绑定失败，不合法的数据源！');
+            // 数据格式须为对象或数组
+            throw new TupleException('Tuple:bind - Bind data should be object or array!');
         }
 
         if (is_object($data)) $data = get_object_vars($data);
@@ -65,7 +66,8 @@ abstract class Tuple
     public function load($primaryKeyValue)
     {
         if ($this->_primaryKey === null) {
-            throw new TupleException('表' . $this->_tableName . '无主键，不支持按主键载入数据！');
+            // 表 $this->_tableName 无主键，不支持按主键载入数据
+            throw new TupleException('Tuple:load - Table ' . $this->_tableName . ' has no primary key!');
         }
 
         $db = DbFactory::getInstance($this->_dbName);
@@ -73,7 +75,8 @@ abstract class Tuple
         $tuple = null;
         if (is_array($primaryKeyValue)) {
             if (!is_array($this->_primaryKey)) {
-                throw new TupleException('表' . $this->_tableName . '非复合主键，不支持按复合主键载入数据！');
+                // 表 $this->_tableName 非复合主键，不支持按复合主键载入数据
+                throw new TupleException('Tuple:load - Table ' . $this->_tableName . ' has no union primary keys, not support load by array!');
             }
 
             $keys = [];
@@ -82,7 +85,8 @@ abstract class Tuple
                 $keys[] = $db->quoteKey($primaryKey) . '=?';
 
                 if (!isset($primaryKeyValue[$primaryKey])) {
-                    throw new TupleException('表' . $this->_tableName . '按复合主键载入数据时未指定主键' . $primaryKey . '的值！');
+                    //  表 $this->_tableName 按复合主键载入数据时未指定主键 $primaryKey 的值
+                    throw new TupleException('Tuple:load - Table ' . $this->_tableName . ' load by union primary keys missing value of "' . $primaryKey . '"!');
                 }
 
                 $values[] = $primaryKeyValue[$primaryKey];
@@ -93,7 +97,8 @@ abstract class Tuple
 
         } else {
             if (is_array($this->_primaryKey)) {
-                throw new TupleException('表' . $this->_tableName . '是复合主键，不支持章个主键载入数据！');
+                // 表 $this->_tableName 是复合主键，不支持章个主键载入数据
+                throw new TupleException('Tuple:load - Table ' . $this->_tableName . ' has union primary keys, not support load by simple primary key!');
             }
 
             $sql = 'SELECT * FROM ' . $db->quoteKey($this->_tableName) . ' WHERE ' . $db->quoteKey($this->_primaryKey) . '=?';
@@ -102,9 +107,11 @@ abstract class Tuple
 
         if (!$tuple) {
             if (is_array($primaryKeyValue)) {
-                throw new TupleException('主键编号（' . implode(',', $this->_primaryKey) . '）为 ' . implode(',', $primaryKeyValue) . ' 的记录不存在！');
+                // 主键编号（ implode(',', $this->_primaryKey)  ）为  implode(',', $primaryKeyValue)  的记录不存在
+                throw new TupleException('Tuple:load - The record of primary key (' . implode(',', $this->_primaryKey) . '), values ' . implode(',', $primaryKeyValue) . ' doesn\'t exists!');
             } else {
-                throw new TupleException('主键编号（' . $this->_primaryKey . '）为 ' . $primaryKeyValue . ' 的记录不存在！');
+                // 主键编号（$this->_primaryKey）为  $primaryKeyValue 的记录不存在
+                throw new TupleException('Tuple:load - The record of primary key (' . $this->_primaryKey . '), value ' . $primaryKeyValue . ' doesn\'t exists!');
             }
         }
 
@@ -140,14 +147,16 @@ abstract class Tuple
             }
         } else {
             if (is_array($field)) {
-                throw new TupleException('Tuple->load() 方法参数错误！');
+                // 方法参数错误
+                throw new TupleException('Tuple:loadBy - parameter error!');
             }
             $sql = 'SELECT * FROM ' . $db->quoteKey($this->_tableName) . ' WHERE ' . $db->quoteKey($field) . '=?';
             $tuple = $db->getObject($sql, [$value]);
         }
 
         if (!$tuple) {
-            throw new TupleException('未找到指定数据记录！');
+            // 未找到指定数据记录
+            throw new TupleException('Tuple:loadBy - no record found!');
         }
 
         return $this->bind($tuple);
@@ -192,20 +201,23 @@ abstract class Tuple
     public function update()
     {
         if ($this->_primaryKey === null) {
-            throw new TupleException('表 ' . $this->_tableName . ' 无主键, 不支持按主键更新！');
+            // 表 $this->_tableName 无主键, 不支持按主键更新
+            throw new TupleException('Tuple:update - Table ' . $this->_tableName . ' has no primary key!');
         }
 
         if (is_array($this->_primaryKey)) {
             $update = true;
             foreach ($this->_primaryKey as $primaryKey) {
                 if (!$this->$primaryKey) {
-                    throw new TupleException('表 ' . $this->_tableName . ' 主键 ' . $primaryKey . ' 未指定值, 不支持按主键更新！');
+                    // 表 $this->_tableName 主键 $primaryKey 未指定值, 不支持按主键更新
+                    throw new TupleException('Tuple:update - Table  ' . $this->_tableName . ' missing value of "' . $primaryKey . '"!');
                 }
             }
         } else {
             $primaryKey = $this->_primaryKey;
             if (!$this->$primaryKey) {
-                throw new TupleException('表 ' . $this->_tableName . ' 主键 ' . $primaryKey . ' 未指定值, 不支持按主键更新！');
+                // 表 $this->_tableName 主键 $primaryKey 未指定值, 不支持按主键更新
+                throw new TupleException('Tuple:update - Table  ' . $this->_tableName . ' missing value of "' . $primaryKey . '"!');
             }
         }
 
@@ -284,12 +296,14 @@ abstract class Tuple
     public function delete($primaryKeyValue = null)
     {
         if ($this->_primaryKey === null) {
-            throw new TupleException('表 ' . $this->_tableName . ' 无主键, 不支持按主键删除！');
+            // 表 $this->_tableName 无主键, 不支持按主键删除
+            throw new TupleException('Tuple:delete - Table ' . $this->_tableName . ' has no primary key!');
         }
 
         if ($primaryKeyValue === null) {
             if ($this->_primaryKey === null) {
-                throw new TupleException('参数缺失, 请指定要删除记录的编号！');
+                // 参数缺失, 请指定要删除记录的编号
+                throw new TupleException('Tuple:delete - ' . $this->_tableName . ' primary key missing!');
             } elseif (is_array($this->_primaryKey)) {
                 $primaryKeyValue = [];
                 foreach ($this->_primaryKey as $primaryKey) {
@@ -303,7 +317,8 @@ abstract class Tuple
             if (is_array($this->_primaryKey)) {
                 foreach ($this->_primaryKey as $primaryKey) {
                     if (!isset($primaryKeyValue[$primaryKey])) {
-                        throw new TupleException('表' . $this->_tableName . '按复合主键删除时未指定主键' . $primaryKey . '的值！');
+                        // 表 $this->_tableName 按复合主键删除时未指定主键 $primaryKey 的值
+                        throw new TupleException('Tuple:delete - ' . $this->_tableName . ' union primary key missing value of ' . $primaryKey . '!');
                     }
                 }
             }
@@ -335,7 +350,8 @@ abstract class Tuple
     public function increment($field, $step = 1)
     {
         if ($this->_primaryKey === null) {
-            throw new TupleException('表 ' . $this->_tableName . ' 无主键, 不支持字段自增！');
+            // 表 $this->_tableName 无主键, 不支持字段自增
+            throw new TupleException('Tuple:increment - Table ' . $this->_tableName . ' has no primary key!');
         }
 
         $db = DbFactory::getInstance($this->_dbName);
@@ -369,7 +385,8 @@ abstract class Tuple
     public function decrement($field, $step = 1)
     {
         if ($this->_primaryKey === null) {
-            throw new TupleException('表 ' . $this->_tableName . ' 无主键, 不支持字段自减！');
+            // 表 $this->_tableName 无主键, 不支持字段自减
+            throw new TupleException('Tuple:decrement - Table ' . $this->_tableName . ' has no primary key!');
         }
 
         $db = DbFactory::getInstance($this->_dbName);
@@ -442,7 +459,7 @@ abstract class Tuple
      */
     public function toObject()
     {
-        return (Object)$this->toArray();
+        return (object)$this->toArray();
     }
 
 }

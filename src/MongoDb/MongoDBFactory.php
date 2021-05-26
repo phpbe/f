@@ -39,7 +39,7 @@ abstract class MongoDBFactory
     {
         $config = ConfigFactory::getInstance('System.MongoDB');
         if (!isset($config->$name)) {
-            throw new RuntimeException('MongoDB配置项（' . $name . '）不存在！');
+            throw new RuntimeException('MongoDB config item (' . $name . ') doesn\'t exist!');
         }
         return new \Be\F\MongoDB\Driver($config->$name);
     }
