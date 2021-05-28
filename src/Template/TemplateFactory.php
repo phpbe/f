@@ -3,6 +3,7 @@
 namespace Be\F\Template;
 
 use Be\F\Config\ConfigFactory;
+use Be\F\Gc;
 use Be\F\Property\PropertyFactory;
 use Be\F\Runtime\RuntimeFactory;
 
@@ -50,6 +51,7 @@ abstract class TemplateFactory
 
         $class = 'Be\\' . $frameworkName . '\\Cache\\Template\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
         self::$cache[$cid][$theme][$template] = new $class();
+        Gc::register($cid, self::class);
         return self::$cache[$cid][$theme][$template];
     }
 

@@ -3,6 +3,7 @@
 namespace Be\F\Db;
 
 use Be\F\Config\ConfigFactory;
+use Be\F\Gc;
 use Be\F\Runtime\RuntimeFactory;
 
 /**
@@ -25,6 +26,7 @@ abstract class TupleFactory
         $cid = \Swoole\Coroutine::getuid();
         if (isset(self::$cache[$cid][$db][$name])) return self::$cache[$cid][$db][$name];
         self::$cache[$cid][$db][$name] = self::newInstance($name);
+        Gc::register($cid, self::class);
         return self::$cache[$cid][$db][$name];
     }
 

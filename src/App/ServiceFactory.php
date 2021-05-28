@@ -2,6 +2,7 @@
 
 namespace Be\F\App;
 
+use Be\F\Gc;
 use Be\F\Runtime\RuntimeFactory;
 
 
@@ -24,6 +25,7 @@ abstract class ServiceFactory
         $cid = \Swoole\Coroutine::getuid();
         if (isset(self::$cache[$cid][$name])) return self::$cache[$cid][$name];
         self::$cache[$cid][$name] = self::newInstance($name);
+        Gc::register($cid, self::class);
         return self::$cache[$cid][$name];
     }
 

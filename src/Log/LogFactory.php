@@ -3,6 +3,8 @@
 namespace Be\F\Log;
 
 
+use Be\F\Gc;
+
 /**
  * Logger 工厂
  */
@@ -21,6 +23,7 @@ abstract class LogFactory
         $cid = \Swoole\Coroutine::getuid();
         if (!isset(self::$cache[$cid])) {
             self::$cache[$cid] = new Driver();
+            Gc::register($cid, self::class);
         }
         return self::$cache[$cid];
     }

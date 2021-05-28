@@ -3,6 +3,7 @@
 namespace Be\F\Cache;
 
 use Be\F\Config\ConfigFactory;
+use Be\F\Gc;
 
 /**
  * Cache 工厂
@@ -29,6 +30,7 @@ abstract class CacheFactory
             }
 
             self::$cache[$cid] = new $driver($config);
+            Gc::register($cid, self::class);
         }
         return self::$cache[$cid];
     }

@@ -3,6 +3,7 @@
 namespace Be\F\Session;
 
 use Be\F\Config\ConfigFactory;
+use Be\F\Gc;
 
 
 /**
@@ -30,6 +31,7 @@ abstract class SessionFactory
             }
 
             self::$cache[$cid] = new $driver($config);
+            Gc::register($cid, self::class);
         }
         return self::$cache[$cid];
     }

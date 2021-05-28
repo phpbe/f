@@ -3,6 +3,8 @@
 namespace Be\F\Request;
 
 
+use Be\F\Gc;
+
 /**
  * Request 工厂
  */
@@ -34,6 +36,7 @@ abstract class RequestFactory
     {
         $cid = \Swoole\Coroutine::getuid();
         self::$cache[$cid] = $instance;
+        Gc::register($cid, self::class);
     }
 
     /**

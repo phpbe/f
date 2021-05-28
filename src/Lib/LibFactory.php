@@ -2,6 +2,7 @@
 
 namespace Be\F\Lib;
 
+use Be\F\Gc;
 use Be\F\Runtime\RuntimeException;
 
 /**
@@ -24,6 +25,7 @@ abstract class LibFactory
         $cid = \Swoole\Coroutine::getuid();
         if (isset(self::$cache[$cid][$name])) return self::$cache[$cid][$name];
         self::$cache[$cid][$name] = self::newInstance($name);
+        Gc::register($cid, self::class);
         return self::$cache[$cid][$name];
     }
 

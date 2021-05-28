@@ -3,6 +3,7 @@
 namespace Be\F\Es;
 
 use Be\F\Config\ConfigFactory;
+use Be\F\Gc;
 use Be\F\Runtime\RuntimeException;
 use Elasticsearch\ClientBuilder;
 
@@ -27,6 +28,7 @@ abstract class EsFactory
         $cid = \Swoole\Coroutine::getuid();
         if (isset(self::$cache[$cid])) return self::$cache[$cid];
         self::$cache[$cid] = self::newInstance();
+        Gc::register($cid, self::class);
         return self::$cache[$cid];
     }
 

@@ -3,6 +3,7 @@
 namespace Be\F\Redis;
 
 use Be\F\Config\ConfigFactory;
+use Be\F\Gc;
 use Be\F\Runtime\RuntimeException;
 
 
@@ -79,6 +80,7 @@ abstract class RedisFactory
         }
 
         self::$cache[$cid][$name] = $driver;
+        Gc::register($cid, self::class);
         return self::$cache[$cid][$name];
     }
 

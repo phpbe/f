@@ -3,6 +3,7 @@
 namespace Be\F\Db;
 
 use Be\F\Config\ConfigFactory;
+use Be\F\Gc;
 
 /**
  * Db 工厂
@@ -86,6 +87,7 @@ abstract class DbFactory
         }
 
         self::$cache[$cid][$name] = $driver;
+        Gc::register($cid, self::class);
         return $driver;
     }
 

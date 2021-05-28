@@ -3,6 +3,8 @@
 namespace Be\F\Response;
 
 
+use Be\F\Gc;
+
 /**
  * Response 工厂
  */
@@ -34,6 +36,7 @@ abstract class ResponseFactory
     {
         $cid = \Swoole\Coroutine::getuid();
         self::$cache[$cid] = $instance;
+        Gc::register($cid, self::class);
     }
 
     /**
