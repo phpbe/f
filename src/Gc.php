@@ -30,6 +30,7 @@ abstract class Gc
             foreach (self::$classes[$cid] as $class => $val) {
                 $class::release();
             }
+            unset(self::$classes[$cid]);
         }
     }
 
