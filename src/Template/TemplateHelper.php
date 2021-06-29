@@ -199,6 +199,16 @@ class TemplateHelper
             }
         }
 
+        $pattern = '/<be-(?:html|head|body|north|middle|west|center|east|south)>/s';
+        if (preg_match($pattern, $codeHtml, $matches)) {
+            $codeHtml = preg_replace($pattern, '', $codeHtml);
+        }
+
+        $pattern = '/<\/be-(?:html|head|body|north|middle|west|center|east|south)>/s';
+        if (preg_match($pattern, $codeHtml, $matches)) {
+            $codeHtml = preg_replace($pattern, '', $codeHtml);
+        }
+
         $codeVars = '';
 
         if (isset($themeProperty->colors) && is_array($themeProperty->colors)) {
