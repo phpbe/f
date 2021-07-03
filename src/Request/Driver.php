@@ -249,6 +249,28 @@ class Driver
         return ((isset($this->request->header['accept']) && strpos(strtolower($this->request->header['accept']), 'application/json') !== false)) ? true : false;
     }
 
+    /**
+     * 是否通过手机访问
+     *
+     * @return bool
+     */
+    public function isMobile()
+    {
+        if (empty($this->request->header['user-agent'])) {
+            return false;
+        } elseif (strpos($this->request->header['user-agent'], 'Mobile') !== false
+            || strpos($this->request->header['user-agent'], 'Android') !== false
+            || strpos($this->request->header['user-agent'], 'Silk/') !== false
+            || strpos($this->request->header['user-agent'], 'Kindle') !== false
+            || strpos($this->request->header['user-agent'], 'BlackBerry') !== false
+            || strpos($this->request->header['user-agent'], 'Opera Mini') !== false
+            || strpos($this->request->header['user-agent'], 'Opera Mobi') !== false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getMethod()
     {
         return $this->request->server['request_method'];
