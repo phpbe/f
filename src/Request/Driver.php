@@ -69,7 +69,7 @@ class Driver
      * @param string|\Closure $format 格式化
      * @return array|mixed|string
      */
-    public function json(string $name = null, $default = null, $format = 'string')
+    public function json(string $name = null, $default = null, $format = null)
     {
         if ($this->json === null) {
             $json = $this->request->getContent();
