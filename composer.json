@@ -1,27 +1,33 @@
 {
-    "name": "be/f",
-    "type": "library",
-    "description": "PHP BE框架（Beyond Exception）",
-    "keywords": ["PHP", "Be", "框架", "Beyond Exception"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "liu12",
-            "email": "i@liu12.com",
-            "homepage": "http://www.liu12.com/"
-        }
-    ],
-    "require": {
-        "php": "~7.1",
-        "monolog/monolog": "~1.11",
-        "elasticsearch/elasticsearch": "^v7.11"
-    },
-    "autoload": {
-        "psr-4": {
-            "Be\\F\\": "src"
-        },
-        "files": [
-            "src/functions.php"
-        ]
+  "name": "be/f",
+  "type": "library",
+  "description": "PHP BE框架（Beyond Exception）",
+  "keywords": [
+    "PHP",
+    "Be",
+    "框架",
+    "Beyond Exception"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "liu12",
+      "email": "i@liu12.com",
+      "homepage": "http://www.liu12.com/"
     }
+  ],
+  "require": {
+    "php": "~7.1",
+    "monolog/monolog": "~1.11",
+    "elasticsearch/elasticsearch": "^v7.11",
+    "ext-gd": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Be\\F\\": "src"
+    },
+    "files": [
+      "src/functions.php"
+    ]
+  }
 }

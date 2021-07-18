@@ -82,7 +82,7 @@ class GdImpl implements Driver
             imagecolortransparent($newImage, $color);
             imagetruecolortopalette($newImage, true, 255);
             imagecopyresized($newImage, $this->image, 0, 0, $x, $y, $width, $height, $width, $height);
-        } elseif ($this->type == 'image/png' || $this->type == 'image/x-png') {
+        } elseif ($this->type == 'image/png' || $this->type == 'image/x-png' || $this->type == 'image/webp') {
             imagealphablending($newImage, false);
             imagesavealpha($newImage, true);
             $color = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
@@ -222,7 +222,7 @@ class GdImpl implements Driver
             }
             imagetruecolortopalette($newImage, true, 255);
             imagecopyresized($newImage, $this->image, $destX, $destY, $srcX, $srcY, $destW, $destH, $srcW, $srcH);
-        } elseif ($this->type == 'image/png' || $this->type == 'image/x-png') {
+        } elseif ($this->type == 'image/png' || $this->type == 'image/x-png' || $this->type == 'image/webp') {
             imagealphablending($newImage, false);
             imagesavealpha($newImage, true);
             $color = imagecolorallocatealpha($newImage, $fillColor[0], $fillColor[1], $fillColor[2], $fillColor[3]);
@@ -314,6 +314,8 @@ class GdImpl implements Driver
             imagepng($this->image, $path);
         } elseif ($this->type == 'image/gif') {
             imagegif($this->image, $path);
+        } elseif ($this->type == 'image/webp') {
+            imagewebp($this->image, $path);
         } else {
             imagejpeg($this->image, $path, 80);
         }
@@ -335,6 +337,8 @@ class GdImpl implements Driver
             imagepng($this->image);
         } elseif ($this->type == 'image/gif') {
             imagegif($this->image);
+        } elseif ($this->type == 'image/webp') {
+            imagewebp($this->image);
         } else {
             imagejpeg($this->image, null, 80);
         }
@@ -375,6 +379,9 @@ class GdImpl implements Driver
             case 'gif':
                 $this->type = 'image/gif';
                 break;
+            case 'webp':
+                $this->type = 'image/webp';
+                break;
             default:
                 $this->type = 'image/jpg';
                 break;
@@ -394,6 +401,8 @@ class GdImpl implements Driver
             return 'png';
         } elseif ($this->type == 'image/gif') {
             return 'gif';
+        } elseif ($this->type == 'image/webp') {
+            return 'webp';
         }
         return 'jpg';
     }
@@ -418,7 +427,7 @@ class GdImpl implements Driver
         // jpeg
         if (function_exists('imagecreatefromjpeg') && (($type == 'image/jpg') || ($type == 'image/jpeg') || ($type == 'image/pjpeg'))) {
             $image = @imagecreatefromjpeg($path);
-               if ($image !== false) {
+            if ($image !== false) {
                 return $image;
             }
         }
@@ -434,6 +443,14 @@ class GdImpl implements Driver
         // gif
         if (function_exists('imagecreatefromgif') && (($type == 'image/gif'))) {
             $image = @imagecreatefromgif($path);
+            if ($image !== false) {
+                return $image;
+            }
+        }
+
+        // webp
+        if (function_exists('imagecreatefromwebp') && (($type == 'image/webp'))) {
+            $image = @imagecreatefromwebp($path);
             if ($image !== false) {
                 return $image;
             }
